@@ -9,33 +9,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden}
-
-:root{
-  --bg:#050510;
-  --surface:#0d0d20;
-  --surface2:#131330;
-  --border:#1a1a3a;
-  --accent:#00e87b;
-  --red:#ff1744;
-  --purple:#a855f7;
-  --gold:#f59e0b;
-  --cyan:#06b6d4;
-  --text:#f0f0ff;
-  --muted:#4a4a6e;
-}
-
-body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--text)}
-
-/* ═══ BG ═══ */
+:root{--bg:#050510;--srf:#0d0d20;--srf2:#131330;--bdr:#1a1a3a;--acc:#00e87b;--red:#ff1744;--pur:#a855f7;--gld:#f59e0b;--cyn:#06b6d4;--txt:#f0f0ff;--mut:#4a4a6e}
+body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--txt)}
 .world{position:fixed;inset:0;pointer-events:none;z-index:0}
 .world .orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:.08}
-.world .orb.a{width:500px;height:500px;background:var(--accent);top:-150px;right:-150px;animation:drift 25s ease-in-out infinite alternate}
+.world .orb.a{width:500px;height:500px;background:var(--acc);top:-150px;right:-150px;animation:drift 25s ease-in-out infinite alternate}
 .world .orb.b{width:400px;height:400px;background:var(--red);bottom:-120px;left:-120px;animation:drift 30s ease-in-out infinite alternate-reverse}
-.world .orb.c{width:300px;height:300px;background:var(--purple);top:50%;left:40%;animation:drift 20s ease-in-out infinite alternate}
+.world .orb.c{width:300px;height:300px;background:var(--pur);top:50%;left:40%;animation:drift 20s ease-in-out infinite alternate}
 @keyframes drift{0%{transform:translate(0,0)}50%{transform:translate(40px,-30px)}100%{transform:translate(-30px,40px)}}
 .world .lines{position:absolute;inset:0;background-image:linear-gradient(rgba(26,26,58,.4) 1px,transparent 1px),linear-gradient(90deg,rgba(26,26,58,.4) 1px,transparent 1px);background-size:56px 56px}
-
-/* ═══ APP ═══ */
 .app{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;overflow:hidden}
 .scr{display:none;flex-direction:column;align-items:center;padding:24px 16px;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;animation:rise .45s ease}
 .scr.on{display:flex}
@@ -45,110 +27,121 @@ body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--text)}
 .landing{justify-content:center;gap:20px;text-align:center;padding-bottom:60px}
 .logo{font-size:100px;filter:drop-shadow(0 0 30px rgba(0,232,123,.4));animation:bob 4s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-8px) scale(1.03)}}
-.brand{font-size:52px;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--cyan),var(--purple));background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gx 5s ease infinite}
+.brand{font-size:52px;font-weight:900;background:linear-gradient(135deg,var(--acc),var(--cyn),var(--pur));background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gx 5s ease infinite}
 @keyframes gx{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-.sub{color:var(--muted);font-size:14px;letter-spacing:3px;text-transform:uppercase}
+.sub{color:var(--mut);font-size:14px;letter-spacing:3px}
 
 /* ═══ Buttons ═══ */
-.btn{border:none;border-radius:16px;font-family:'Vazirmatn',sans-serif;font-weight:700;cursor:pointer;transition:all .2s ease;position:relative;overflow:hidden}
+.btn{border:none;border-radius:16px;font-family:'Vazirmatn',sans-serif;font-weight:700;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
 .btn:active{transform:scale(.96)}
 .b-lg{width:100%;max-width:340px;padding:18px;font-size:18px}
 .b-sm{padding:10px 20px;font-size:14px;width:auto}
-.b-green{background:linear-gradient(135deg,var(--accent),#00c06a);color:#000;box-shadow:0 4px 30px rgba(0,232,123,.3)}
-.b-green:hover{box-shadow:0 4px 40px rgba(0,232,123,.5)}
+.b-green{background:linear-gradient(135deg,var(--acc),#00c06a);color:#000;box-shadow:0 4px 30px rgba(0,232,123,.3)}
 .b-red{background:linear-gradient(135deg,var(--red),#cc1133);color:#fff;box-shadow:0 4px 30px rgba(255,23,68,.3)}
-.b-purple{background:linear-gradient(135deg,var(--purple),#7c3aed);color:#fff;box-shadow:0 4px 30px rgba(168,85,247,.3)}
-.b-dark{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
-.b-dark:hover{border-color:var(--accent)}
+.b-purple{background:linear-gradient(135deg,var(--pur),#7c3aed);color:#fff;box-shadow:0 4px 30px rgba(168,85,247,.3)}
+.b-gold{background:linear-gradient(135deg,var(--gld),#d97706);color:#000;box-shadow:0 4px 30px rgba(245,158,11,.3)}
+.b-dark{background:var(--srf2);color:var(--txt);border:1px solid var(--bdr)}
+.b-dark:hover{border-color:var(--acc)}
 .b-off{opacity:.3;pointer-events:none}
 
 /* ═══ Card ═══ */
-.card{width:100%;max-width:400px;background:rgba(13,13,32,.9);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:20px;padding:22px}
+.card{width:100%;max-width:400px;background:rgba(13,13,32,.9);backdrop-filter:blur(16px);border:1px solid var(--bdr);border-radius:20px;padding:22px}
 .card-h{font-size:17px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
 
 /* ═══ Input ═══ */
 .inp-wrap{display:flex;gap:8px}
-.inp{flex:1;padding:14px 16px;background:var(--bg);border:1.5px solid var(--border);border-radius:14px;color:var(--text);font-family:'Vazirmatn',sans-serif;font-size:15px;outline:none;transition:border .2s}
-.inp:focus{border-color:var(--accent)}
-.inp::placeholder{color:var(--muted)}
+.inp{flex:1;padding:14px 16px;background:var(--bg);border:1.5px solid var(--bdr);border-radius:14px;color:var(--txt);font-family:'Vazirmatn',sans-serif;font-size:15px;outline:none;transition:border .2s}
+.inp:focus{border-color:var(--acc)}
+.inp::placeholder{color:var(--mut)}
 
 /* ═══ Players ═══ */
 .plist{width:100%;max-width:400px;display:flex;flex-direction:column;gap:6px;margin:12px 0}
-.pitm{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;background:var(--surface);border:1px solid var(--border);border-radius:14px;animation:slideIn .3s ease}
-@keyframes slideIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
+.pitm{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;background:var(--srf);border:1px solid var(--bdr);border-radius:14px;animation:slIn .3s ease}
+@keyframes slIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
 .pitm-l{display:flex;align-items:center;gap:10px}
-.pitm-n{width:32px;height:32px;background:var(--purple);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.pitm-n{width:32px;height:32px;background:var(--pur);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
 .pitm-name{font-weight:500;font-size:15px}
 .pitm-x{background:none;border:none;color:var(--red);font-size:18px;cursor:pointer;opacity:.5;padding:4px}
 .pitm-x:hover{opacity:1}
-.pcount{text-align:center;color:var(--muted);font-size:13px}
-.pcount b{color:var(--accent)}
+.pcount{text-align:center;color:var(--mut);font-size:13px}
+.pcount b{color:var(--acc)}
 
-/* ═══ Category Grid ═══ */
+/* ═══ Category ═══ */
 .cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;width:100%}
-.catb{padding:18px 12px;background:var(--surface);border:1.5px solid var(--border);border-radius:16px;cursor:pointer;transition:all .2s;text-align:center;font-family:'Vazirmatn',sans-serif}
-.catb:hover{border-color:var(--accent);transform:translateY(-2px)}
-.catb.sel{border-color:var(--accent);background:rgba(0,232,123,.06);box-shadow:0 0 24px rgba(0,232,123,.08)}
+.catb{padding:18px 12px;background:var(--srf);border:1.5px solid var(--bdr);border-radius:16px;cursor:pointer;transition:all .2s;text-align:center;font-family:'Vazirmatn',sans-serif}
+.catb:hover{border-color:var(--acc);transform:translateY(-2px)}
+.catb.sel{border-color:var(--acc);background:rgba(0,232,123,.06);box-shadow:0 0 24px rgba(0,232,123,.08)}
 .catb-i{font-size:32px;margin-bottom:6px}
 .catb-n{font-size:14px;font-weight:600}
 
-/* ═══ Role Reveal ═══ */
+/* ═══ Role ═══ */
 .role-area{display:flex;flex-direction:column;align-items:center;gap:16px;width:100%;max-width:380px}
 .role-top{text-align:center}
-.role-top .name{font-size:22px;font-weight:700;color:var(--accent)}
-.role-top .idx{font-size:13px;color:var(--muted)}
-
+.role-top .name{font-size:22px;font-weight:700;color:var(--acc)}
+.role-top .idx{font-size:13px;color:var(--mut)}
 .big-card{width:100%;aspect-ratio:3/4;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;cursor:pointer;transition:all .6s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:hidden}
-.big-card.face{background:linear-gradient(135deg,var(--purple),#4c1d95);border:2px solid var(--purple);box-shadow:0 0 60px rgba(168,85,247,.2)}
+.big-card.face{background:linear-gradient(135deg,var(--pur),#4c1d95);border:2px solid var(--pur);box-shadow:0 0 60px rgba(168,85,247,.2)}
 .big-card.face::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 12px,rgba(255,255,255,.02) 12px,rgba(255,255,255,.02) 24px);pointer-events:none}
 .big-card.face .big-ico{font-size:80px;opacity:.6}
 .big-card.face .tap-txt{font-size:15px;color:rgba(255,255,255,.6)}
-
 .big-card.spy{background:linear-gradient(160deg,#1a0010,#440022,#1a0010);border:2px solid var(--red);box-shadow:0 0 60px rgba(255,23,68,.2)}
-.big-card.cit{background:linear-gradient(160deg,#001a10,#004422,#001a10);border:2px solid var(--accent);box-shadow:0 0 60px rgba(0,232,123,.2)}
+.big-card.cit{background:linear-gradient(160deg,#001a10,#004422,#001a10);border:2px solid var(--acc);box-shadow:0 0 60px rgba(0,232,123,.2)}
 .big-card .big-ico{font-size:80px}
 .big-card .big-title{font-size:30px;font-weight:900}
 .big-card .big-word{font-size:22px;font-weight:700;padding:10px 24px;background:rgba(0,232,123,.12);border-radius:12px;border:1px solid rgba(0,232,123,.2)}
-.big-card .big-sub{font-size:13px;color:var(--muted);text-align:center;line-height:1.8}
-
+.big-card .big-sub{font-size:13px;color:var(--mut);text-align:center;line-height:1.8}
 .nav-row{display:flex;gap:8px;width:100%;max-width:380px}
 .nav-row .btn{flex:1}
 
-/* ═══ Game Screen ═══ */
-.game-wrap{width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;gap:16px}
-.word-display{width:100%;padding:24px;background:linear-gradient(135deg,var(--surface),var(--surface2));border:2px solid var(--border);border-radius:20px;text-align:center;position:relative;overflow:hidden}
+/* ═══ Game ═══ */
+.game-wrap{width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.word-display{width:100%;padding:24px;background:linear-gradient(135deg,var(--srf),var(--srf2));border:2px solid var(--bdr);border-radius:20px;text-align:center;position:relative;overflow:hidden}
 .word-display::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,232,123,.03),rgba(168,85,247,.03));pointer-events:none}
-.word-label{font-size:12px;color:var(--muted);margin-bottom:6px;letter-spacing:2px}
-.word-text{font-size:36px;font-weight:900;color:var(--accent);text-shadow:0 0 20px rgba(0,232,123,.3)}
-
-.turn-box{width:100%;padding:20px;background:var(--surface);border:1.5px solid var(--border);border-radius:16px;text-align:center}
-.turn-label{font-size:13px;color:var(--muted);margin-bottom:8px}
-.turn-name{font-size:28px;font-weight:900;color:var(--gold);text-shadow:0 0 20px rgba(245,158,11,.3)}
-.turn-instruct{font-size:13px;color:var(--muted);margin-top:8px}
-
-.round-badge{padding:8px 20px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-size:14px;font-weight:600;color:var(--cyan)}
-
+.word-label{font-size:12px;color:var(--mut);margin-bottom:6px;letter-spacing:2px}
+.word-text{font-size:36px;font-weight:900;color:var(--acc);text-shadow:0 0 20px rgba(0,232,123,.3)}
+.turn-box{width:100%;padding:20px;background:var(--srf);border:1.5px solid var(--bdr);border-radius:16px;text-align:center}
+.turn-label{font-size:13px;color:var(--mut);margin-bottom:8px}
+.turn-name{font-size:28px;font-weight:900;color:var(--gld);text-shadow:0 0 20px rgba(245,158,11,.3)}
+.turn-instruct{font-size:13px;color:var(--mut);margin-top:8px}
+.round-badge{padding:8px 20px;background:var(--srf2);border:1px solid var(--bdr);border-radius:20px;font-size:14px;font-weight:600;color:var(--cyn)}
 .action-row{display:flex;gap:8px;width:100%}
 .action-row .btn{flex:1}
 
 /* ═══ Vote ═══ */
 .vgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;width:100%;max-width:400px}
-.vbtn{padding:18px 10px;background:var(--surface);border:2px solid var(--border);border-radius:16px;cursor:pointer;transition:all .2s;text-align:center;font-family:'Vazirmatn',sans-serif;color:var(--text)}
+.vbtn{padding:18px 10px;background:var(--srf);border:2px solid var(--bdr);border-radius:16px;cursor:pointer;transition:all .2s;text-align:center;font-family:'Vazirmatn',sans-serif;color:var(--txt)}
 .vbtn:hover{border-color:var(--red)}
-.vbtn.on{border-color:var(--red);background:rgba(255,23,68,.08);box-shadow:0 0 20px rgba(255,23,68,.1)}
+.vbtn.on{border-color:var(--red);background:rgba(255,23,68,.08)}
 .vbtn-n{font-size:16px;font-weight:600;margin-bottom:4px}
 .vbtn-c{font-size:28px;font-weight:900;color:var(--red)}
+
+/* ═══ Guess Screen ═══ */
+.guess-box{width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.guess-title{font-size:20px;font-weight:700;color:var(--red);text-align:center}
+.guess-sub{font-size:14px;color:var(--mut);text-align:center}
+.guess-input{width:100%;padding:16px;background:var(--srf);border:2px solid var(--red);border-radius:16px;color:var(--txt);font-family:'Vazirmatn',sans-serif;font-size:20px;text-align:center;outline:none}
+.guess-input::placeholder{color:var(--mut);font-size:16px}
+
+/* ═══ Scoreboard ═══ */
+.score-grid{width:100%;max-width:400px;display:flex;flex-direction:column;gap:6px}
+.score-item{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--srf);border:1px solid var(--bdr);border-radius:14px}
+.score-left{display:flex;align-items:center;gap:10px}
+.score-num{width:32px;height:32px;background:var(--pur);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.score-name{font-weight:600;font-size:15px}
+.score-val{font-size:22px;font-weight:900;color:var(--gld)}
+.score-item.spy-row{border-color:var(--red);background:rgba(255,23,68,.05)}
+.score-item.spy-row .score-num{background:var(--red)}
 
 /* ═══ Result ═══ */
 .rbox{width:100%;max-width:380px;padding:32px 20px;border-radius:24px;text-align:center;animation:popIn .5s cubic-bezier(.34,1.56,.64,1)}
 @keyframes popIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
-.rbox.win{background:linear-gradient(160deg,#00120a,#003318);border:2px solid var(--accent);box-shadow:0 0 80px rgba(0,232,123,.12)}
+.rbox.win{background:linear-gradient(160deg,#00120a,#003318);border:2px solid var(--acc);box-shadow:0 0 80px rgba(0,232,123,.12)}
 .rbox.lose{background:linear-gradient(160deg,#1a0010,#440020);border:2px solid var(--red);box-shadow:0 0 80px rgba(255,23,68,.12)}
 .r-ico{font-size:90px;margin-bottom:12px}
 .r-title{font-size:28px;font-weight:900;margin-bottom:6px}
-.r-sub{font-size:14px;color:var(--muted);margin-bottom:20px}
+.r-sub{font-size:14px;color:var(--mut);margin-bottom:20px}
 .r-row{padding:14px;background:rgba(0,0,0,.25);border-radius:12px;margin-top:10px}
-.r-row .lbl{font-size:11px;color:var(--muted)}
+.r-row .lbl{font-size:11px;color:var(--mut)}
 .r-row .val{font-size:20px;font-weight:700;margin-top:4px}
 
 /* ═══ Confetti ═══ */
@@ -156,40 +149,41 @@ body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--text)}
 .conf{position:absolute;width:8px;height:8px;border-radius:2px;animation:cfall 3s ease-out forwards}
 @keyframes cfall{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
 
-/* ═══ Scrollbar ═══ */
 ::-webkit-scrollbar{width:3px}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:2px}
 </style>
 </head>
 <body>
-
 <div class="world"><div class="orb a"></div><div class="orb b"></div><div class="orb c"></div><div class="lines"></div></div>
-
 <div class="app">
 
-<!-- ══════ LANDING ══════ -->
+<!-- 0: Landing -->
 <div class="scr on landing" id="s0">
   <div class="logo">🕵️</div>
   <div class="brand">SpyGK</div>
   <div class="sub">جاسوس کیه؟</div>
   <button class="btn b-lg b-green" onclick="go(1)" style="margin-top:40px">🎮 شروع بازی</button>
-  <div style="margin-top:20px;display:flex;gap:10px;justify-content:center">
-    <div style="padding:8px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;font-size:12px;color:var(--muted)">👥 ۳-۱۲ نفره</div>
-    <div style="padding:8px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;font-size:12px;color:var(--muted)">📂 ۱۰ دسته‌بندی</div>
-    <div style="padding:8px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;font-size:12px;color:var(--muted)">🎯 ۸۰+ کلمه</div>
+  <div style="margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+    <div style="padding:8px 14px;background:var(--srf);border:1px solid var(--bdr);border-radius:10px;font-size:12px;color:var(--mut)">👥 ۳-۱۲ نفره</div>
+    <div style="padding:8px 14px;background:var(--srf);border:1px solid var(--bdr);border-radius:10px;font-size:12px;color:var(--mut)">📂 ۱۰ دسته</div>
+    <div style="padding:8px 14px;background:var(--srf);border:1px solid var(--bdr);border-radius:10px;font-size:12px;color:var(--mut)">🎯 ۱۵۰+ کلمه</div>
+  </div>
+  <!-- scoreboard summary -->
+  <div id="homeScores" style="margin-top:24px;width:100%;max-width:340px;display:none">
+    <div class="card" style="padding:14px">
+      <div style="font-size:13px;font-weight:700;color:var(--gld);margin-bottom:8px;text-align:center">🏆 جدول امتیازات</div>
+      <div id="homeScoreList"></div>
+    </div>
   </div>
 </div>
 
-<!-- ══════ CATEGORY ══════ -->
+<!-- 1: Category -->
 <div class="scr" id="s1">
-  <div class="card">
-    <div class="card-h">📂 دسته‌بندی کلمات</div>
-    <div class="cat-grid" id="catGrid"></div>
-  </div>
+  <div class="card"><div class="card-h">📂 دسته‌بندی کلمات</div><div class="cat-grid" id="catGrid"></div></div>
   <button class="btn b-lg b-dark" onclick="go(0)" style="margin-top:12px">بازگشت</button>
 </div>
 
-<!-- ══════ PLAYERS ══════ -->
+<!-- 2: Players -->
 <div class="scr" id="s2">
   <div class="card">
     <div class="card-h">👥 بازیکنان</div>
@@ -200,20 +194,14 @@ body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--text)}
   </div>
   <div class="plist" id="pList"></div>
   <div class="pcount">تعداد: <b id="pCnt">0</b> بازیکن (حداقل ۳)</div>
-  <button class="btn b-lg b-green" id="goBtn" onclick="beginGame()">🎯 انتخاب نقش‌ها</button>
+  <button class="btn b-lg b-green b-off" id="goBtn" onclick="beginGame()">🎯 انتخاب نقش‌ها</button>
 </div>
 
-<!-- ══════ ROLE ══════ -->
+<!-- 3: Role -->
 <div class="scr" id="s3">
   <div class="role-area">
-    <div class="role-top">
-      <div class="name" id="rName"></div>
-      <div class="idx" id="rIdx"></div>
-    </div>
-    <div class="big-card face" id="rCard" onclick="flip()">
-      <div class="big-ico">🕵️</div>
-      <div class="tap-txt">🔍 لمس کن تا نقشت رو ببینی</div>
-    </div>
+    <div class="role-top"><div class="name" id="rName"></div><div class="idx" id="rIdx"></div></div>
+    <div class="big-card face" id="rCard" onclick="flip()"><div class="big-ico">🕵️</div><div class="tap-txt">🔍 لمس کن تا نقشت رو ببینی</div></div>
     <div class="nav-row">
       <button class="btn b-lg b-dark" onclick="prevR()">◀ قبلی</button>
       <button class="btn b-lg b-purple" id="rNext">بعدی ▶</button>
@@ -221,14 +209,11 @@ body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--text)}
   </div>
 </div>
 
-<!-- ══════ GAME ══════ -->
+<!-- 4: Game -->
 <div class="scr" id="s4">
   <div class="game-wrap">
     <div class="round-badge" id="roundBadge">دور ۱</div>
-    <div class="word-display">
-      <div class="word-label">کلمه مخفی</div>
-      <div class="word-text" id="wordText"></div>
-    </div>
+    <div class="word-display"><div class="word-label">کلمه مخفی</div><div class="word-text" id="wordText"></div></div>
     <div class="turn-box">
       <div class="turn-label">الان نوبت این بازیکنه 👇</div>
       <div class="turn-name" id="turnName"></div>
@@ -238,52 +223,76 @@ body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--text)}
       <button class="btn b-lg b-green" onclick="nextTurn()">✅ بعدی</button>
       <button class="btn b-lg b-red" onclick="go(5)">🗳 رأی‌گیری</button>
     </div>
-    <div style="font-size:12px;color:var(--muted);text-align:center">جاسوس کلمه مخفی رو نمیدونه — مراقب باش!</div>
+    <div style="font-size:12px;color:var(--mut);text-align:center">جاسوس کلمه مخفی رو نمیدونه</div>
   </div>
 </div>
 
-<!-- ══════ VOTE ══════ -->
+<!-- 5: Vote -->
 <div class="scr" id="s5">
-  <div class="card">
-    <div class="card-h">🗳 جاسوس کیه؟</div>
-    <div style="font-size:13px;color:var(--muted)">روی بازیکن مورد نظر کلیک کن</div>
-  </div>
+  <div class="card"><div class="card-h">🗳 جاسوس کیه؟</div><div style="font-size:13px;color:var(--mut)">روی بازیکن مورد نظر کلیک کن</div></div>
   <div class="vgrid" id="vGrid"></div>
-  <button class="btn b-lg b-red b-off" id="vBtn" onclick="result()">🔍 نمایش نتیجه</button>
+  <button class="btn b-lg b-red b-off" id="vBtn" onclick="afterVote()">🔍 ادامه</button>
 </div>
 
-<!-- ══════ RESULT ══════ -->
+<!-- 6: Spy Guess -->
 <div class="scr" id="s6">
+  <div class="guess-box">
+    <div class="guess-title">🕵️ جاسوس می‌خواد کلمه رو حدس بزنه!</div>
+    <div class="guess-sub">جاسوس کلمه‌ای که فکر می‌کنه مخفیه رو تایپ کنه</div>
+    <input class="guess-input" id="guessInp" placeholder="کلمه مخفی رو بنویس...">
+    <div class="action-row" style="max-width:400px">
+      <button class="btn b-lg b-red" onclick="spyGuessed(true)">✅ درست حدس زد</button>
+      <button class="btn b-lg b-green" onclick="spyGuessed(false)">❌ غلط حدس زد</button>
+    </div>
+  </div>
+</div>
+
+<!-- 7: Result -->
+<div class="scr" id="s7">
   <div class="rbox" id="rBox"></div>
-  <button class="btn b-lg b-green" onclick="reset()" style="margin-top:24px">🔄 بازی جدید</button>
+  <div class="action-row" style="max-width:380px;margin-top:20px">
+    <button class="btn b-lg b-green" onclick="nextRound()">🔄 دور بعد</button>
+    <button class="btn b-lg b-dark" onclick="go(8)">🏆 جدول امتیازات</button>
+  </div>
+</div>
+
+<!-- 8: Scoreboard -->
+<div class="scr" id="s8">
+  <div class="card">
+    <div class="card-h" style="justify-content:center">🏆 جدول امتیازات</div>
+    <div class="score-grid" id="scoreGrid"></div>
+  </div>
+  <button class="btn b-lg b-green" onclick="go(1)" style="margin-top:16px">🎮 بازی جدید</button>
+  <button class="btn b-lg b-dark" onclick="resetAll()" style="margin-top:8px">🗑 صفر کردن امتیازات</button>
 </div>
 
 </div>
-
 <div class="conf-box" id="confetti"></div>
 
 <script>
 // ═══════════════════════════════════════
-//  WORD DATA — هر کلمه یه عنوان + زیرمجموعه
+//  WORD DATA — 150+ words across 10 categories
 // ═══════════════════════════════════════
-const DATA = {
-  '🍎 میوه': ['سیب','موز','پرتقال','انگور','هندوانه','طالبی','انار','گلابی','خیار','بادوم','گردو','فندق','کیوی','آلبالو','شلیل'],
-  '🐱 حیوانات': ['گربه','سگ','شیر','خرس','فیل','گوزن','خرگوش','روباه','مار','عقاب','ماهی','لاک‌پشت','قورباغه','پروانه','морچه'],
-  '🚗 وسایل نقلیه': ['ماشین','اتوبوس','دوچرخه','قایق','هواپیما','قطار','موتور','کامیون','آمبولانس','آتش‌نشانی','ترن','چتر','قاطر','هلیکوپتر','کشتی'],
-  '🍕 غذاها': ['پیتزا','برگر','سوشی','کباب','آش','قورمه‌سبزی','زرشک‌پلو','فلافل','ساندویچ','پاستا','سوپ','سالاد','استیک','ریزوتو','لاتا'],
-  '⚽ ورزشها': ['فوتبال','بسکتبال','والیبال','شنا','دوچرخه‌سواری','شمشیربازی','کشتی','بوکس','تنیس','گلف','هندبال','پینگ‌پنگ','اسکی','چوگان','وزنه‌برداری'],
-  '👔 مشاغل': ['پزشک','مهندس','معلم','آشپز','راننده','نقاش','نجار','وکیل','پلیس','آتش‌نشان','خیاط','بنا','قاضی','عکاس','روان‌شناس'],
-  '🌍 شهرها': ['تهران','اصفهان','شیراز','تبریز','مشهد','استانبول','دبی','لندن','پاریس','توکیو','رم','نیویورک','مسکو','سئول','بارسلون'],
-  '🎸 موسیقی': ['گیتار','پیانو','درام','ویولن','بیس','ساکسیفون','ترومپت','فلوت','ارگ','سنتور','تار','سه‌تار','نی','دف','دمام'],
-  '🎨 رنگها': ['قرمز','آبی','سبز','زرد','نارنجی','بنفش','صورتی','قهوه‌ای','مشکی','سفید','طوسی','طلایی','نقره‌ای','فیروزه‌ای','یشمی'],
-  '🔧 ابزارآلات': ['چکش','پیچ‌گوشتی','اره','مته','انبر','متر','تراز','گونیا','سنباده','کاردک','پتک','سیم‌چین','هویه','پمپ','کمپرسور'],
+const DATA={
+'🍎 میوه':['سیب','موز','پرتقال','انگور','هندوانه','طالبی','انار','گلابی','خیار','بادوم','گردو','فندق','کیوی','آلبالو','شلیل','خربزه','توت‌فرنگی','انبه','نارگیل','زیتون','لیمو','پسته','بادام','کشمش','توت','آلو','هلو','خرمالو','دستنبو','نخل','کام‌کوات','ماگنولیا','سالک','گواوا','پاپایا'],
+'🐱 حیوانات':['گربه','سگ','شیر','خرس','فیل','گوزن','خرگوش','روباه','مار','عقاب','ماهی','لاک‌پشت','قورباغه','پروانه','مورچه','زرافه','تمساح','شتر','بوف','جغد','سنجاب','گاو','اسب','گوسفند','خوک','duck','خروس','بلبل','فاخته','طاووس','ببر','پلنگ','گرگ','گورخر','دلفین'],
+'🚗 وسایل نقلیه':['ماشین','اتوبوس','دوچرخه','قایق','هواپیما','قطار','موتور','کامیون','آمبولانس','آتش‌نشانی','ترن','هلیکوپتر','کشتی','زیردریایی','جت','اسکوتر','کاروان','تریلر','چتر','جت‌اسکی','پارو','کایت','پlane','چرخ‌دستی','تله‌کابین','مونوریل','فונیکولار','سبک‌پوش','گوندولا','قاطر','شترسواری','لوکوموتیو','اتوکار','وانت','سواری'],
+'🍕 غذاها':['پیتزا','برگر','سوشی','کباب','آش','قورمه‌سبزی','زرشک‌پلو','فلافل','ساندویچ','پاستا','سوپ','سالاد','استیک','ریزوتو','ریشتو','آش رشته','باقلا‌پلو','بیف‌استروگانف','کوفته','اشکنه','باقلی','ماکارونی','پلو','خورشت','کتلت','شامی','کوکو','املت','پنکیک','وافل','کراکف','دونات','چیزکیک','کیک','بستنی'],
+'⚽ ورزشها':['فوتبال','بسکتبال','والیبال','شنا','دوچرخه‌سواری','شمشیربازی','کشتی','بوکس','تنیس','گلف','هندبال','پینگ‌پنگ','اسکی','چوگان','وزنه‌برداری','تکواندو','جودو','کاراته','فوتسال','هockey','راگبی','کریکت','بیسبال','اسنوکر','billiards','سافاری','ماهیگیری','شیرجه','غواصی',' windsurf','پاروزنی','سوارکاری','تیراندازی','تیر و کمان','پرتاب'],
+'👔 مشاغل':['پزشک','مهندس','معلم','آشپز','راننده','نقاش','نجار','وکیل','پلیس','آتش‌نشان','خیاط','بنا','قاضی','عکاس','روان‌شناس','برنامه‌نویس','حسابدار','دلال','آرایشگر','قصاب','نانوا','باغبان','کشاورز','مزرعه‌دار','صیاد','مکانیک','برقکار','لوله‌کش','بنا','نقشه‌کش','مهندس عمران','ویراستار','مترجم','خبرنگار','عکاس خبری'],
+'🌍 شهرها':['تهران','اصفهان','شیراز','تبریز','مشهد','استانبول','دبی','لندن','پاریس','توکیو','رم','نیویورک','مسکو','سئول','بارسلون','برلین','آمستردام','ونیز','روما','آتن','قاهره','کپنهاگ',' oslo','مسکو','ورشو','بوداپست','پراگ','وین','زوریخ','موناکو','دبی','دوحه','ریاض','مسقط','تفلیس'],
+'🎸 موسیقی':['گیتار','پیانو','درام','ویولن','بیس','ساکسیفون','ترومپت','فلوت','ارگ','سنتور','تار','سه‌تار','نی','دف','تمبک','نی‌انبان','قانون','قیچک','کمانچه','دودوک','باغلاما','بوزوکی','همنگ','کیبورد','吉他的','هارمونیکا','کلارینت','ابوا','هورن','تیمپانی','زیلوفون','گلوکنشپیل','ماریمبا','کیوی','کیتارا'],
+'🎨 رنگها':['قرمز','آبی','سبز','زرد','نارنجی','بنفش','صورتی','قهوه‌ای','مشکی','سفید','طوسی','طلایی','نقره‌ای','فیروزه‌ای','یشمی','لاجوردی','زرشکی','یاسی','آبی آسمانی','سبز زمردی','نعنایی','ماه‌تابی','خردلی','زرین','مسی','برنزی','کرم','بژ','کاراملی','شکلاتی','یاقوتی','یاقوت کبود','مرجانی','سدری','گندمی'],
+'🔧 ابزارآلات':['چکش','پیچ‌گوشتی','اره','مته','انبر','متر','تراز','گونیا','سنباده','کاردک','پتک','سیم‌چین','هویه','پمپ','کمپرسور','آچار','آچار فرانسه','دیسک‌بر','فرز','سنگ‌ساب','دریل','پیچ‌بکس','نوار‌چسب','چسب‌حرارتی','کاتر','خط‌کش','گونیای فلزی','تراش','سوزن','میخ','پیچ','مهره','شیلنگ','فیلتر','شیرآلات'],
 };
 
 // ═══════════════════════════════════════
 //  STATE
 // ═══════════════════════════════════════
-let players=[], spyIdx=-1, secretWord='', secretCat='', round=1, turnIdx=0;
-let voteMap={}, currentCat='';
+let players=[],spyIdx=-1,secretWord='',currentCat='',round=1,turnIdx=0;
+let roles={},voteMap={},scores={};
+let usedWords=new Set();
+let ri=0;
 
 // ═══════════════════════════════════════
 //  NAV
@@ -293,6 +302,8 @@ function go(n){
   document.getElementById('s'+n).classList.add('on');
   if(n===1)renderCats();
   if(n===5)renderVote();
+  if(n===8)renderScores();
+  if(n===0)renderHomeScores();
 }
 
 // ═══════════════════════════════════════
@@ -300,11 +311,8 @@ function go(n){
 // ═══════════════════════════════════════
 function renderCats(){
   document.getElementById('catGrid').innerHTML=Object.keys(DATA).map(k=>{
-    const[kIcon,...kName]=k.split(' ');
-    return `<div class="catb ${currentCat===k?'sel':''}" onclick="pickCat('${k}')">
-      <div class="catb-i">${kIcon}</div>
-      <div class="catb-n">${kName.join(' ')}</div>
-    </div>`;
+    const[i,...n]=k.split(' ');
+    return`<div class="catb ${currentCat===k?'sel':''}" onclick="pickCat('${k}')"><div class="catb-i">${i}</div><div class="catb-n">${n.join(' ')}</div></div>`;
   }).join('');
 }
 function pickCat(k){currentCat=k;go(2)}
@@ -315,97 +323,61 @@ function pickCat(k){currentCat=k;go(2)}
 function addP(){
   const inp=document.getElementById('pInp'),n=inp.value.trim();
   if(!n||players.includes(n))return;
-  players.push(n);inp.value='';renderP();
+  players.push(n);scores[n]=scores[n]||0;inp.value='';renderP();
 }
 function rmP(n){players=players.filter(p=>p!==n);renderP()}
 function renderP(){
-  document.getElementById('pList').innerHTML=players.map((p,i)=>`
-    <div class="pitm"><div class="pitm-l"><div class="pitm-n">${i+1}</div><div class="pitm-name">${p}</div></div><button class="pitm-x" onclick="rmP('${p}')">✕</button></div>`).join('');
+  document.getElementById('pList').innerHTML=players.map((p,i)=>`<div class="pitm"><div class="pitm-l"><div class="pitm-n">${i+1}</div><div class="pitm-name">${p}</div></div><button class="pitm-x" onclick="rmP('${p}')">✕</button></div>`).join('');
   document.getElementById('pCnt').textContent=players.length;
   const b=document.getElementById('goBtn');
   players.length>=3?b.classList.remove('b-off'):b.classList.add('b-off');
 }
 
 // ═══════════════════════════════════════
-//  GAME START
+//  BEGIN GAME
 // ═══════════════════════════════════════
 function beginGame(){
   if(players.length<3||!currentCat)return;
-  // pick random word from category
-  const words=DATA[currentCat];
-  secretWord=words[Math.floor(Math.random()*words.length)];
-  // pick spy — NEVER first player
-  let candidates=players.map((_,i)=>i).filter(i=>i!==0);
-  spyIdx=candidates[Math.floor(Math.random()*candidates.length)];
-  // shuffle for turns but spy never first
-  players=shuffle(players);
-  // make sure spy is not first
-  if(players.indexOf(players[spyIdx])===0){
-    // swap with someone else
-    const swap=players.length>1?1:0;
-    [players[0],players[swap]]=[players[swap],players[0]];
-  }
-  // re-find spy index after shuffle
-  spyIdx=-1;
-  const origPlayers=players.slice();
-  // actually let's track differently
-  round=1;turnIdx=0;voteMap={};
-  // assign roles
-  roles={};
-  players.forEach((p,i)=>roles[p]=i===getSpyIndex()?true:false);
-  
-  // simpler: just assign spy
-  spyIdx=Math.floor(Math.random()*(players.length-1))+1; // never 0
+  // pick word not used yet
+  const avail=DATA[currentCat].filter(w=>!usedWords.has(w));
+  if(avail.length===0){usedWords.clear();return beginGame()}
+  secretWord=avail[Math.floor(Math.random()*avail.length)];
+  usedWords.add(secretWord);
+  // spy never index 0
+  spyIdx=Math.floor(Math.random()*(players.length-1))+1;
   roles={};players.forEach((p,i)=>roles[p]=i!==spyIdx);
-  
+  round=1;turnIdx=0;voteMap={};
   go(3);showRole();
 }
-
-function getSpyIndex(){return spyIdx}
 
 // ═══════════════════════════════════════
 //  ROLE REVEAL
 // ═══════════════════════════════════════
-let ri=0;
 function showRole(){
-  ri=0;
-  document.getElementById('rName').textContent=players[0];
-  document.getElementById('rIdx').textContent=`(۱ / ${players.length})`;
-  const card=document.getElementById('rCard');
-  card.className='big-card face';
-  card.innerHTML='<div class="big-ico">🕵️</div><div class="tap-txt">🔍 لمس کن تا نقشت رو ببینی</div>';
-  setupNext();
+  ri=0;showRoleAt(0);
 }
-
-function flip(){
-  const card=document.getElementById('rCard');
-  if(!card.classList.contains('face'))return;
-  const p=players[ri],isSpy=!roles[p];
-  card.className=`big-card ${isSpy?'spy':'cit'}`;
-  card.innerHTML=isSpy?
-    `<div class="big-ico">🕵️</div><div class="big-title" style="color:var(--red)">تو جاسوسی!</div><div class="big-sub">کلمه مخفی رو نمیدونی<br>سعی کن از بقیه حدس بزنی!</div>`:
-    `<div class="big-ico">👤</div><div class="big-title" style="color:var(--accent)">تو شهروندی</div><div class="big-word">${secretWord}</div><div class="big-sub">کلمه مخفی: <b style="color:var(--accent)">${secretWord}</b><br>یه کلمه مرتبط بگو تا جاسوس نفهمه!</div>`;
-}
-
-function setupNext(){
-  const btn=document.getElementById('rNext');
-  if(ri===players.length-1){btn.textContent='🎯 شروع بازی';btn.onclick=()=>{turnIdx=0;go(4);showTurn()}}
-  else{btn.textContent='بعدی ▶';btn.onclick=nextR}
-}
-function nextR(){
-  if(!document.getElementById('rCard').classList.contains('face')){ri++;if(ri<players.length){showRoleAt(ri)}return}
-  flip();
-}
-function prevR(){if(ri>0){ri--;showRoleAt(ri)}}
 function showRoleAt(i){
   ri=i;
   document.getElementById('rName').textContent=players[i];
   document.getElementById('rIdx').textContent=`(${i+1} / ${players.length})`;
-  const card=document.getElementById('rCard');
-  card.className='big-card face';
-  card.innerHTML='<div class="big-ico">🕵️</div><div class="tap-txt">🔍 لمس کن تا نقشت رو ببینی</div>';
-  setupNext();
+  const c=document.getElementById('rCard');
+  c.className='big-card face';
+  c.innerHTML='<div class="big-ico">🕵️</div><div class="tap-txt">🔍 لمس کن تا نقشت رو ببینی</div>';
+  const btn=document.getElementById('rNext');
+  if(i===players.length-1){btn.textContent='🎯 شروع بازی';btn.onclick=()=>{turnIdx=0;go(4);showTurn()}}
+  else{btn.textContent='بعدی ▶';btn.onclick=nextR}
 }
+function flip(){
+  const c=document.getElementById('rCard');
+  if(!c.classList.contains('face'))return;
+  const isSpy=!roles[players[ri]];
+  c.className=`big-card ${isSpy?'spy':'cit'}`;
+  c.innerHTML=isSpy?
+    `<div class="big-ico">🕵️</div><div class="big-title" style="color:var(--red)">تو جاسوسی!</div><div class="big-sub">کلمه مخفی رو نمیدونی<br>سعی کن از کلمات بقیه حدس بزنی!</div>`:
+    `<div class="big-ico">👤</div><div class="big-title" style="color:var(--acc)">تو شهروندی</div><div class="big-word">${secretWord}</div><div class="big-sub">کلمه مخفی: <b style="color:var(--acc)">${secretWord}</b><br>یه کلمه مرتبط بگو!</div>`;
+}
+function nextR(){if(!document.getElementById('rCard').classList.contains('face')){ri++;if(ri<players.length)showRoleAt(ri);return}flip()}
+function prevR(){if(ri>0)showRoleAt(ri-1)}
 
 // ═══════════════════════════════════════
 //  GAME PLAY
@@ -415,7 +387,6 @@ function showTurn(){
   document.getElementById('wordText').textContent=secretWord;
   document.getElementById('turnName').textContent=players[turnIdx];
 }
-
 function nextTurn(){
   turnIdx++;
   if(turnIdx>=players.length){turnIdx=0;round++}
@@ -427,11 +398,7 @@ function nextTurn(){
 // ═══════════════════════════════════════
 function renderVote(){
   voteMap={};
-  document.getElementById('vGrid').innerHTML=players.map(p=>`
-    <div class="vbtn" onclick="vote('${p}',this)">
-      <div class="vbtn-n">${p}</div>
-      <div class="vbtn-c" id="vc-${p}">0</div>
-    </div>`).join('');
+  document.getElementById('vGrid').innerHTML=players.map(p=>`<div class="vbtn" onclick="vote('${p}',this)"><div class="vbtn-n">${p}</div><div class="vbtn-c" id="vc-${p}">0</div></div>`).join('');
   document.getElementById('vBtn').classList.add('b-off');
 }
 function vote(n,el){
@@ -443,44 +410,98 @@ function vote(n,el){
 }
 
 // ═══════════════════════════════════════
-//  RESULT
+//  AFTER VOTE → GUESS PHASE
 // ═══════════════════════════════════════
-function result(){
+let spyCaught=false;
+function afterVote(){
+  // check if spy was caught
   let mx=0,sus='';
   for(const[n,c]of Object.entries(voteMap)){if(c>mx){mx=c;sus=n}}
-  const spyP=players[spyIdx];
-  const caught=sus===spyP;
-  const box=document.getElementById('rBox');
-  if(caught){
-    box.className='rbox win';
-    box.innerHTML=`
-      <div class="r-ico">🎉</div>
-      <div class="r-title" style="color:var(--accent)">جاسوس پیدا شد!</div>
-      <div class="r-sub">شهروندان برنده شدند — ${round} دور بازی شد</div>
-      <div class="r-row"><div class="lbl">🕵️ جاسوس</div><div class="val" style="color:var(--red)">${spyP}</div></div>
-      <div class="r-row"><div class="lbl">🎯 کلمه مخفی</div><div class="val" style="color:var(--accent)">${secretWord}</div></div>
-      <div class="r-row"><div class="lbl">📂 دسته</div><div class="val" style="color:var(--cyan)">${currentCat}</div></div>`;
-    confetti();
-  } else {
-    box.className='rbox lose';
-    box.innerHTML=`
-      <div class="r-ico">🕵️</div>
-      <div class="r-title" style="color:var(--red)">جاسوس فرار کرد!</div>
-      <div class="r-sub">${sus?`${sus} متهم شد ولی جاسوس نبود`:'هیچکس رأی نگرفت'}</div>
-      <div class="r-row"><div class="lbl">🕵️ جاسوس واقعی</div><div class="val" style="color:var(--red)">${spyP}</div></div>
-      <div class="r-row"><div class="lbl">🎯 کلمه مخفی</div><div class="val" style="color:var(--accent)">${secretWord}</div></div>
-      <div class="r-row"><div class="lbl">📂 دسته</div><div class="val" style="color:var(--cyan)">${currentCat}</div></div>`;
-  }
+  spyCaught=sus===players[spyIdx];
+  document.getElementById('guessInp').value='';
   go(6);
 }
 
-function reset(){go(1)}
+// ═══════════════════════════════════════
+//  SPY GUESS RESULT
+// ═══════════════════════════════════════
+function spyGuessed(correct){
+  const spyP=players[spyIdx];
+  let spyWins=correct; // spy guessed correctly
+  let citizensWin=spyCaught && !correct;
+
+  if(spyWins){
+    // spy wins — +3 to spy
+    scores[spyP]=(scores[spyP]||0)+3;
+  } else if(citizensWin){
+    // citizens caught spy and spy didn't guess — +1 to each citizen
+    players.forEach(p=>{if(p!==spyP)scores[p]=(scores[p]||0)+1});
+  } else {
+    // spy not caught but also didn't guess — nobody gets points
+  }
+
+  const box=document.getElementById('rBox');
+  if(spyWins){
+    box.className='rbox lose';
+    box.innerHTML=`
+      <div class="r-ico">🕵️</div>
+      <div class="r-title" style="color:var(--red)">جاسوس برنده شد!</div>
+      <div class="r-sub">${spyP} تونست کلمه رو حدس بزنه — +۳ امتیاز</div>
+      <div class="r-row"><div class="lbl">🕵️ جاسوس</div><div class="val" style="color:var(--red)">${spyP}</div></div>
+      <div class="r-row"><div class="lbl">🎯 کلمه مخفی</div><div class="val" style="color:var(--acc)">${secretWord}</div></div>
+      <div class="r-row"><div class="lbl">📅 دور</div><div class="val" style="color:var(--cyn)">${round}</div></div>`;
+  } else if(citizensWin){
+    box.className='rbox win';
+    box.innerHTML=`
+      <div class="r-ico">🎉</div>
+      <div class="r-title" style="color:var(--acc)">شهروندان برنده شدند!</div>
+      <div class="r-sub">${spyP} جاسوس بود و نتونست حدس بزنه — +۱ امتیاز به هر شهروند</div>
+      <div class="r-row"><div class="lbl">🕵️ جاسوس</div><div class="val" style="color:var(--red)">${spyP}</div></div>
+      <div class="r-row"><div class="lbl">🎯 کلمه مخفی</div><div class="val" style="color:var(--acc)">${secretWord}</div></div>
+      <div class="r-row"><div class="lbl">📅 دور</div><div class="val" style="color:var(--cyn)">${round}</div></div>`;
+    confetti();
+  } else {
+    box.className='rbox lose';
+    const sus=getTopVote();
+    box.innerHTML=`
+      <div class="r-ico">🤝</div>
+      <div class="r-title" style="color:var(--gld)">مساوی شد!</div>
+      <div class="r-sub">${sus?`${sus} متهم شد ولی جاسوس نبود`:'کسی رأی نگرفت'} و جاسوس نتونست حدس بزنه</div>
+      <div class="r-row"><div class="lbl">🕵️ جاسوس</div><div class="val" style="color:var(--red)">${spyP}</div></div>
+      <div class="r-row"><div class="lbl">🎯 کلمه مخفی</div><div class="val" style="color:var(--acc)">${secretWord}</div></div>
+      <div class="r-row"><div class="lbl">📅 دور</div><div class="val" style="color:var(--cyn)">${round}</div></div>`;
+  }
+  go(7);
+}
+
+function getTopVote(){let mx=0,s='';for(const[n,c]of Object.entries(voteMap)){if(c>mx){mx=c;s=n}}return s}
+
+function nextRound(){go(1)}
+
+// ═══════════════════════════════════════
+//  SCOREBOARD
+// ═══════════════════════════════════════
+function renderScores(){
+  const sorted=Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('scoreGrid').innerHTML=sorted.map(([name,pts],i)=>{
+    const isSpy=roles[name]===false;
+    return`<div class="score-item ${isSpy?'spy-row':''}"><div class="score-left"><div class="score-num">${i+1}</div><div class="score-name">${name}</div></div><div class="score-val">${pts}</div></div>`;
+  }).join('');
+}
+
+function renderHomeScores(){
+  const sorted=Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+  if(sorted.length===0||sorted.every(([,p])=>p===0)){document.getElementById('homeScores').style.display='none';return}
+  document.getElementById('homeScores').style.display='block';
+  document.getElementById('homeScoreList').innerHTML=sorted.slice(0,5).map(([n,p],i)=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bdr)"><span style="font-size:13px">${i+1}. ${n}</span><span style="font-size:13px;font-weight:700;color:var(--gld)">${p}</span></div>`).join('');
+}
+
+function resetAll(){scores={};players.forEach(p=>scores[p]=0);go(0)}
 
 // ═══════════════════════════════════════
 //  UTILS
 // ═══════════════════════════════════════
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-
 function confetti(){
   const c=document.getElementById('confetti');c.innerHTML='';
   const cols=['#00e87b','#ff1744','#a855f7','#f59e0b','#06b6d4','#fff'];
