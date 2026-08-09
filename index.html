@@ -3,582 +3,478 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SpyGK — بازی جاسوس</title>
+<title>SpyGK — جاسوس کیه؟</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕵️</text></svg>">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap');
-
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-
-:root{
-  --bg:#06060f;
-  --bg2:#0c0c1d;
-  --card:#111128;
-  --card2:#161636;
-  --border:#1c1c40;
-  --accent:#00ff88;
-  --accent-dim:#00cc6a;
-  --red:#ff2255;
-  --purple:#8b5cf6;
-  --purple-dim:#6d28d9;
-  --gold:#fbbf24;
-  --blue:#3b82f6;
-  --text:#eeeef8;
-  --muted:#5a5a80;
-  --glass:rgba(17,17,40,0.85);
-  --r:16px;
-}
-
 html,body{height:100%;overflow:hidden}
 
-body{
-  font-family:'Vazirmatn',sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  display:flex;
-  flex-direction:column;
+:root{
+  --bg:#050510;
+  --surface:#0d0d20;
+  --surface2:#131330;
+  --border:#1a1a3a;
+  --accent:#00e87b;
+  --red:#ff1744;
+  --purple:#a855f7;
+  --gold:#f59e0b;
+  --cyan:#06b6d4;
+  --text:#f0f0ff;
+  --muted:#4a4a6e;
 }
 
-/* ═══ Background Effects ═══ */
-.bg-anim{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.12;animation:orbFloat 20s ease-in-out infinite alternate}
-.orb.o1{width:400px;height:400px;background:var(--accent);top:-100px;right:-100px}
-.orb.o2{width:300px;height:300px;background:var(--red);bottom:-80px;left:-80px;animation-delay:-10s}
-.orb.o3{width:250px;height:250px;background:var(--purple);top:40%;left:50%;animation-delay:-5s}
-@keyframes orbFloat{0%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,-20px) scale(1.1)}100%{transform:translate(-20px,30px) scale(.9)}}
+body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--text)}
 
-.grid-bg{position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:linear-gradient(rgba(28,28,64,.25) 1px,transparent 1px),linear-gradient(90deg,rgba(28,28,64,.25) 1px,transparent 1px);
-  background-size:48px 48px}
+/* ═══ BG ═══ */
+.world{position:fixed;inset:0;pointer-events:none;z-index:0}
+.world .orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:.08}
+.world .orb.a{width:500px;height:500px;background:var(--accent);top:-150px;right:-150px;animation:drift 25s ease-in-out infinite alternate}
+.world .orb.b{width:400px;height:400px;background:var(--red);bottom:-120px;left:-120px;animation:drift 30s ease-in-out infinite alternate-reverse}
+.world .orb.c{width:300px;height:300px;background:var(--purple);top:50%;left:40%;animation:drift 20s ease-in-out infinite alternate}
+@keyframes drift{0%{transform:translate(0,0)}50%{transform:translate(40px,-30px)}100%{transform:translate(-30px,40px)}}
+.world .lines{position:absolute;inset:0;background-image:linear-gradient(rgba(26,26,58,.4) 1px,transparent 1px),linear-gradient(90deg,rgba(26,26,58,.4) 1px,transparent 1px);background-size:56px 56px}
 
-/* ═══ Main Container ═══ */
-.app{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
-
-.screen{display:none;flex-direction:column;align-items:center;padding:20px;min-height:100%;animation:fadeUp .4s ease}
-.screen.active{display:flex}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+/* ═══ APP ═══ */
+.app{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.scr{display:none;flex-direction:column;align-items:center;padding:24px 16px;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;animation:rise .45s ease}
+.scr.on{display:flex}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
 
 /* ═══ Landing ═══ */
-.landing{justify-content:center;gap:16px;padding-top:60px}
-.logo-wrap{position:relative;margin-bottom:8px}
-.logo-emoji{font-size:80px;animation:pulse 3s ease-in-out infinite}
-@keyframes pulse{0%,100%{transform:scale(1);filter:drop-shadow(0 0 20px rgba(0,255,136,.3))}50%{transform:scale(1.05);filter:drop-shadow(0 0 40px rgba(0,255,136,.5))}}
-.brand{font-size:42px;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--purple),var(--accent));background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gradShift 4s ease infinite;letter-spacing:-1px}
-@keyframes gradShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-.tagline{color:var(--muted);font-size:13px;letter-spacing:2px;text-transform:uppercase}
-.feature-row{display:flex;gap:12px;margin-top:24px}
-.feat{padding:10px 16px;background:var(--card);border:1px solid var(--border);border-radius:12px;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
-.feat span{font-size:16px}
+.landing{justify-content:center;gap:20px;text-align:center;padding-bottom:60px}
+.logo{font-size:100px;filter:drop-shadow(0 0 30px rgba(0,232,123,.4));animation:bob 4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-8px) scale(1.03)}}
+.brand{font-size:52px;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--cyan),var(--purple));background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gx 5s ease infinite}
+@keyframes gx{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.sub{color:var(--muted);font-size:14px;letter-spacing:3px;text-transform:uppercase}
 
 /* ═══ Buttons ═══ */
-.btn{width:100%;max-width:360px;padding:16px;border:none;border-radius:var(--r);font-family:'Vazirmatn',sans-serif;font-size:17px;font-weight:700;cursor:pointer;transition:all .25s ease;position:relative;overflow:hidden}
-.btn:active{transform:scale(.97)}
-.btn-glow{background:linear-gradient(135deg,var(--accent),var(--accent-dim));color:#000;box-shadow:0 4px 24px rgba(0,255,136,.3)}
-.btn-glow:hover{box-shadow:0 4px 32px rgba(0,255,136,.5)}
-.btn-red{background:linear-gradient(135deg,var(--red),#cc1144);color:#fff;box-shadow:0 4px 24px rgba(255,34,85,.3)}
-.btn-purple{background:linear-gradient(135deg,var(--purple),var(--purple-dim));color:#fff;box-shadow:0 4px 24px rgba(139,92,246,.3)}
-.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
-.btn-ghost:hover{border-color:var(--accent)}
-.btn-sm{padding:10px 20px;font-size:14px;width:auto}
-.btn-disabled{opacity:.35;pointer-events:none}
+.btn{border:none;border-radius:16px;font-family:'Vazirmatn',sans-serif;font-weight:700;cursor:pointer;transition:all .2s ease;position:relative;overflow:hidden}
+.btn:active{transform:scale(.96)}
+.b-lg{width:100%;max-width:340px;padding:18px;font-size:18px}
+.b-sm{padding:10px 20px;font-size:14px;width:auto}
+.b-green{background:linear-gradient(135deg,var(--accent),#00c06a);color:#000;box-shadow:0 4px 30px rgba(0,232,123,.3)}
+.b-green:hover{box-shadow:0 4px 40px rgba(0,232,123,.5)}
+.b-red{background:linear-gradient(135deg,var(--red),#cc1133);color:#fff;box-shadow:0 4px 30px rgba(255,23,68,.3)}
+.b-purple{background:linear-gradient(135deg,var(--purple),#7c3aed);color:#fff;box-shadow:0 4px 30px rgba(168,85,247,.3)}
+.b-dark{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+.b-dark:hover{border-color:var(--accent)}
+.b-off{opacity:.3;pointer-events:none}
 
-/* ═══ Cards ═══ */
-.card{width:100%;max-width:400px;background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:var(--r);padding:20px}
-.card-glow{border-color:rgba(0,255,136,.2);box-shadow:0 0 30px rgba(0,255,136,.05)}
-.section-title{font-size:18px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.section-title .icon{font-size:22px}
+/* ═══ Card ═══ */
+.card{width:100%;max-width:400px;background:rgba(13,13,32,.9);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:20px;padding:22px}
+.card-h{font-size:17px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
 
 /* ═══ Input ═══ */
-.input-group{display:flex;gap:8px}
-.inp{flex:1;padding:13px 16px;background:var(--bg);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Vazirmatn',sans-serif;font-size:15px;outline:none;transition:border-color .2s}
+.inp-wrap{display:flex;gap:8px}
+.inp{flex:1;padding:14px 16px;background:var(--bg);border:1.5px solid var(--border);border-radius:14px;color:var(--text);font-family:'Vazirmatn',sans-serif;font-size:15px;outline:none;transition:border .2s}
 .inp:focus{border-color:var(--accent)}
 .inp::placeholder{color:var(--muted)}
 
 /* ═══ Players ═══ */
-.players-list{width:100%;max-width:400px;display:flex;flex-direction:column;gap:6px}
-.p-item{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:12px;animation:slideR .3s ease}
-@keyframes slideR{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
-.p-left{display:flex;align-items:center;gap:10px}
-.p-num{width:30px;height:30px;background:var(--purple);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
-.p-name{font-weight:500;font-size:15px}
-.p-del{background:none;border:none;color:var(--red);font-size:18px;cursor:pointer;padding:4px 8px;opacity:.6;transition:opacity .2s}
-.p-del:hover{opacity:1}
-.counter{text-align:center;color:var(--muted);font-size:13px}
-.counter b{color:var(--accent)}
+.plist{width:100%;max-width:400px;display:flex;flex-direction:column;gap:6px;margin:12px 0}
+.pitm{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;background:var(--surface);border:1px solid var(--border);border-radius:14px;animation:slideIn .3s ease}
+@keyframes slideIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
+.pitm-l{display:flex;align-items:center;gap:10px}
+.pitm-n{width:32px;height:32px;background:var(--purple);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.pitm-name{font-weight:500;font-size:15px}
+.pitm-x{background:none;border:none;color:var(--red);font-size:18px;cursor:pointer;opacity:.5;padding:4px}
+.pitm-x:hover{opacity:1}
+.pcount{text-align:center;color:var(--muted);font-size:13px}
+.pcount b{color:var(--accent)}
 
-/* ═══ Role Card ═══ */
-.role-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;width:100%;max-width:360px}
-.role-turn{font-size:13px;color:var(--muted);text-align:center}
-.role-turn b{color:var(--accent)}
+/* ═══ Category Grid ═══ */
+.cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;width:100%}
+.catb{padding:18px 12px;background:var(--surface);border:1.5px solid var(--border);border-radius:16px;cursor:pointer;transition:all .2s;text-align:center;font-family:'Vazirmatn',sans-serif}
+.catb:hover{border-color:var(--accent);transform:translateY(-2px)}
+.catb.sel{border-color:var(--accent);background:rgba(0,232,123,.06);box-shadow:0 0 24px rgba(0,232,123,.08)}
+.catb-i{font-size:32px;margin-bottom:6px}
+.catb-n{font-size:14px;font-weight:600}
 
-.role-card{width:100%;aspect-ratio:3/4;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;cursor:pointer;transition:all .5s ease;position:relative;overflow:hidden}
-.role-card::before{content:'';position:absolute;inset:0;border-radius:20px;opacity:0;transition:opacity .5s}
-.role-card.face-down{background:linear-gradient(135deg,var(--purple-dim),#3b0764);border:2px solid var(--purple);box-shadow:0 0 40px rgba(139,92,246,.25)}
-.role-card.face-down::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(255,255,255,.03) 10px,rgba(255,255,255,.03) 20px)}
-.role-card.face-down .tap-hint{font-size:14px;color:rgba(255,255,255,.7)}
-.role-card.face-down .role-big-icon{font-size:72px;opacity:.7}
+/* ═══ Role Reveal ═══ */
+.role-area{display:flex;flex-direction:column;align-items:center;gap:16px;width:100%;max-width:380px}
+.role-top{text-align:center}
+.role-top .name{font-size:22px;font-weight:700;color:var(--accent)}
+.role-top .idx{font-size:13px;color:var(--muted)}
 
-.role-card.spy-card{background:linear-gradient(160deg,#1a0011,#330022,#1a0011);border:2px solid var(--red);box-shadow:0 0 50px rgba(255,34,85,.2)}
-.role-card.citizen-card{background:linear-gradient(160deg,#00120a,#00331a,#00120a);border:2px solid var(--accent);box-shadow:0 0 50px rgba(0,255,136,.2)}
+.big-card{width:100%;aspect-ratio:3/4;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;cursor:pointer;transition:all .6s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:hidden}
+.big-card.face{background:linear-gradient(135deg,var(--purple),#4c1d95);border:2px solid var(--purple);box-shadow:0 0 60px rgba(168,85,247,.2)}
+.big-card.face::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 12px,rgba(255,255,255,.02) 12px,rgba(255,255,255,.02) 24px);pointer-events:none}
+.big-card.face .big-ico{font-size:80px;opacity:.6}
+.big-card.face .tap-txt{font-size:15px;color:rgba(255,255,255,.6)}
 
-.role-big-icon{font-size:72px}
-.role-title{font-size:28px;font-weight:900}
-.role-loc{font-size:18px;font-weight:600;padding:8px 20px;background:rgba(0,255,136,.1);border-radius:10px;border:1px solid rgba(0,255,136,.2)}
-.role-hint-text{font-size:12px;color:var(--muted);max-width:280px;text-align:center;line-height:1.8}
+.big-card.spy{background:linear-gradient(160deg,#1a0010,#440022,#1a0010);border:2px solid var(--red);box-shadow:0 0 60px rgba(255,23,68,.2)}
+.big-card.cit{background:linear-gradient(160deg,#001a10,#004422,#001a10);border:2px solid var(--accent);box-shadow:0 0 60px rgba(0,232,123,.2)}
+.big-card .big-ico{font-size:80px}
+.big-card .big-title{font-size:30px;font-weight:900}
+.big-card .big-word{font-size:22px;font-weight:700;padding:10px 24px;background:rgba(0,232,123,.12);border-radius:12px;border:1px solid rgba(0,232,123,.2)}
+.big-card .big-sub{font-size:13px;color:var(--muted);text-align:center;line-height:1.8}
 
-.nav-row{display:flex;gap:8px;width:100%;max-width:360px}
+.nav-row{display:flex;gap:8px;width:100%;max-width:380px}
 .nav-row .btn{flex:1}
 
-/* ═══ Category Select ═══ */
-.cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;width:100%}
-.cat-btn{padding:14px 12px;background:var(--card);border:1.5px solid var(--border);border-radius:14px;cursor:pointer;transition:all .2s;text-align:center;font-family:'Vazirmatn',sans-serif}
-.cat-btn:hover{border-color:var(--accent);transform:translateY(-1px)}
-.cat-btn.selected{border-color:var(--accent);background:rgba(0,255,136,.08);box-shadow:0 0 20px rgba(0,255,136,.1)}
-.cat-icon{font-size:28px;margin-bottom:4px}
-.cat-name{font-size:13px;font-weight:600;color:var(--text)}
-.cat-count{font-size:11px;color:var(--muted)}
+/* ═══ Game Screen ═══ */
+.game-wrap{width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.word-display{width:100%;padding:24px;background:linear-gradient(135deg,var(--surface),var(--surface2));border:2px solid var(--border);border-radius:20px;text-align:center;position:relative;overflow:hidden}
+.word-display::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,232,123,.03),rgba(168,85,247,.03));pointer-events:none}
+.word-label{font-size:12px;color:var(--muted);margin-bottom:6px;letter-spacing:2px}
+.word-text{font-size:36px;font-weight:900;color:var(--accent);text-shadow:0 0 20px rgba(0,232,123,.3)}
 
-/* ═══ Discussion ═══ */
-.disc-top{text-align:center;margin-bottom:8px}
-.disc-loc{font-size:14px;color:var(--muted);margin-bottom:4px}
-.disc-loc b{color:var(--accent);font-size:18px}
-.timer-ring{position:relative;width:160px;height:160px;margin:16px auto}
-.timer-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
-.timer-ring circle{fill:none;stroke-width:6}
-.timer-ring .bg-ring{stroke:var(--border)}
-.timer-ring .fg-ring{stroke:var(--accent);stroke-linecap:round;transition:stroke-dashoffset 1s linear}
-.timer-ring .fg-ring.warn{stroke:var(--red)}
-.timer-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.timer-num{font-size:40px;font-weight:900;font-variant-numeric:tabular-nums;color:var(--accent)}
-.timer-num.warn{color:var(--red)}
-.timer-label{font-size:11px;color:var(--muted)}
-.disc-warn{font-size:12px;color:var(--red);background:rgba(255,34,85,.08);padding:8px 16px;border-radius:10px;border:1px solid rgba(255,34,85,.15);text-align:center}
+.turn-box{width:100%;padding:20px;background:var(--surface);border:1.5px solid var(--border);border-radius:16px;text-align:center}
+.turn-label{font-size:13px;color:var(--muted);margin-bottom:8px}
+.turn-name{font-size:28px;font-weight:900;color:var(--gold);text-shadow:0 0 20px rgba(245,158,11,.3)}
+.turn-instruct{font-size:13px;color:var(--muted);margin-top:8px}
+
+.round-badge{padding:8px 20px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-size:14px;font-weight:600;color:var(--cyan)}
+
+.action-row{display:flex;gap:8px;width:100%}
+.action-row .btn{flex:1}
 
 /* ═══ Vote ═══ */
-.vote-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;width:100%}
-.vote-btn{padding:16px 10px;background:var(--card);border:2px solid var(--border);border-radius:14px;cursor:pointer;transition:all .2s;text-align:center;font-family:'Vazirmatn',sans-serif;color:var(--text)}
-.vote-btn:hover{border-color:var(--red)}
-.vote-btn.pressed{border-color:var(--red);background:rgba(255,34,85,.1);box-shadow:0 0 20px rgba(255,34,85,.15)}
-.v-name{font-size:15px;font-weight:600;margin-bottom:4px}
-.v-count{font-size:26px;font-weight:900;color:var(--red)}
+.vgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;width:100%;max-width:400px}
+.vbtn{padding:18px 10px;background:var(--surface);border:2px solid var(--border);border-radius:16px;cursor:pointer;transition:all .2s;text-align:center;font-family:'Vazirmatn',sans-serif;color:var(--text)}
+.vbtn:hover{border-color:var(--red)}
+.vbtn.on{border-color:var(--red);background:rgba(255,23,68,.08);box-shadow:0 0 20px rgba(255,23,68,.1)}
+.vbtn-n{font-size:16px;font-weight:600;margin-bottom:4px}
+.vbtn-c{font-size:28px;font-weight:900;color:var(--red)}
 
 /* ═══ Result ═══ */
-.result-box{width:100%;max-width:380px;padding:28px 20px;border-radius:24px;text-align:center;animation:popIn .5s cubic-bezier(.34,1.56,.64,1)}
-@keyframes popIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
-.result-box.win{background:linear-gradient(160deg,#00120a,#00331a);border:2px solid var(--accent);box-shadow:0 0 60px rgba(0,255,136,.15)}
-.result-box.lose{background:linear-gradient(160deg,#1a0011,#330022);border:2px solid var(--red);box-shadow:0 0 60px rgba(255,34,85,.15)}
-.r-icon{font-size:80px;margin-bottom:12px}
-.r-title{font-size:26px;font-weight:900;margin-bottom:6px}
+.rbox{width:100%;max-width:380px;padding:32px 20px;border-radius:24px;text-align:center;animation:popIn .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
+.rbox.win{background:linear-gradient(160deg,#00120a,#003318);border:2px solid var(--accent);box-shadow:0 0 80px rgba(0,232,123,.12)}
+.rbox.lose{background:linear-gradient(160deg,#1a0010,#440020);border:2px solid var(--red);box-shadow:0 0 80px rgba(255,23,68,.12)}
+.r-ico{font-size:90px;margin-bottom:12px}
+.r-title{font-size:28px;font-weight:900;margin-bottom:6px}
 .r-sub{font-size:14px;color:var(--muted);margin-bottom:20px}
-.r-info{padding:14px;background:rgba(0,0,0,.3);border-radius:12px;margin-top:10px}
-.r-info .lbl{font-size:11px;color:var(--muted)}
-.r-info .val{font-size:20px;font-weight:700;margin-top:2px}
+.r-row{padding:14px;background:rgba(0,0,0,.25);border-radius:12px;margin-top:10px}
+.r-row .lbl{font-size:11px;color:var(--muted)}
+.r-row .val{font-size:20px;font-weight:700;margin-top:4px}
 
 /* ═══ Confetti ═══ */
-.confetti-box{position:fixed;inset:0;pointer-events:none;z-index:99}
-.conf{position:absolute;width:8px;height:8px;border-radius:2px;animation:confFall 3s ease-out forwards}
-@keyframes confFall{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+.conf-box{position:fixed;inset:0;pointer-events:none;z-index:99}
+.conf{position:absolute;width:8px;height:8px;border-radius:2px;animation:cfall 3s ease-out forwards}
+@keyframes cfall{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
 
 /* ═══ Scrollbar ═══ */
-::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-
-/* ═══ Responsive ═══ */
-@media(max-width:360px){.brand{font-size:34px}.logo-emoji{font-size:64px}}
 </style>
 </head>
 <body>
 
-<div class="bg-anim"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
-<div class="grid-bg"></div>
+<div class="world"><div class="orb a"></div><div class="orb b"></div><div class="orb c"></div><div class="lines"></div></div>
 
 <div class="app">
 
 <!-- ══════ LANDING ══════ -->
-<div class="screen active landing" id="s-landing">
-  <div class="logo-wrap"><div class="logo-emoji">🕵️</div></div>
+<div class="scr on landing" id="s0">
+  <div class="logo">🕵️</div>
   <div class="brand">SpyGK</div>
-  <div class="tagline">جاسوس رو پیدا کن</div>
-  <div class="feature-row">
-    <div class="feat"><span>👥</span>۳-۱۲ نفره</div>
-    <div class="feat"><span>🎯</span>۵۰+ مکان</div>
-    <div class="feat"><span>💡</span>هینت جاسوس</div>
+  <div class="sub">جاسوس کیه؟</div>
+  <button class="btn b-lg b-green" onclick="go(1)" style="margin-top:40px">🎮 شروع بازی</button>
+  <div style="margin-top:20px;display:flex;gap:10px;justify-content:center">
+    <div style="padding:8px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;font-size:12px;color:var(--muted)">👥 ۳-۱۲ نفره</div>
+    <div style="padding:8px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;font-size:12px;color:var(--muted)">📂 ۱۰ دسته‌بندی</div>
+    <div style="padding:8px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;font-size:12px;color:var(--muted)">🎯 ۸۰+ کلمه</div>
   </div>
-  <button class="btn btn-glow" onclick="go('s-category')" style="margin-top:32px">🎮 شروع بازی</button>
 </div>
 
 <!-- ══════ CATEGORY ══════ -->
-<div class="screen" id="s-category">
-  <div class="card card-glow">
-    <div class="section-title"><span class="icon">📂</span>دسته‌بندی مکان رو انتخاب کن</div>
+<div class="scr" id="s1">
+  <div class="card">
+    <div class="card-h">📂 دسته‌بندی کلمات</div>
     <div class="cat-grid" id="catGrid"></div>
   </div>
-  <button class="btn btn-ghost" onclick="go('s-landing')" style="margin-top:12px">بازگشت</button>
+  <button class="btn b-lg b-dark" onclick="go(0)" style="margin-top:12px">بازگشت</button>
 </div>
 
 <!-- ══════ PLAYERS ══════ -->
-<div class="screen" id="s-players">
-  <div class="card card-glow">
-    <div class="section-title"><span class="icon">👥</span>بازیکنان</div>
-    <div class="input-group">
-      <input class="inp" id="pInput" placeholder="نام بازیکن..." onkeydown="if(event.key==='Enter')addP()">
-      <button class="btn btn-glow btn-sm" onclick="addP()">افزودن</button>
+<div class="scr" id="s2">
+  <div class="card">
+    <div class="card-h">👥 بازیکنان</div>
+    <div class="inp-wrap">
+      <input class="inp" id="pInp" placeholder="نام بازیکن..." onkeydown="if(event.key==='Enter')addP()">
+      <button class="btn b-sm b-green" onclick="addP()">افزودن</button>
     </div>
   </div>
-  <div class="players-list" id="pList"></div>
-  <div class="counter">تعداد: <b id="pCount">0</b> بازیکن</div>
-  <button class="btn btn-glow" id="startBtn" onclick="beginGame()" class="btn-disabled">🎯 شروع بازی</button>
+  <div class="plist" id="pList"></div>
+  <div class="pcount">تعداد: <b id="pCnt">0</b> بازیکن (حداقل ۳)</div>
+  <button class="btn b-lg b-green" id="goBtn" onclick="beginGame()">🎯 انتخاب نقش‌ها</button>
 </div>
 
 <!-- ══════ ROLE ══════ -->
-<div class="screen" id="s-role">
-  <div class="role-wrap">
-    <div class="role-turn">نوبت: <b id="rpName"></b> <span id="rpIdx" style="color:var(--muted);font-size:12px"></span></div>
-    <div class="role-card face-down" id="roleCard" onclick="flipCard()">
-      <div class="role-big-icon">🕵️</div>
-      <div class="tap-hint">🔍 برای نمایش نقش کلیک کن</div>
+<div class="scr" id="s3">
+  <div class="role-area">
+    <div class="role-top">
+      <div class="name" id="rName"></div>
+      <div class="idx" id="rIdx"></div>
+    </div>
+    <div class="big-card face" id="rCard" onclick="flip()">
+      <div class="big-ico">🕵️</div>
+      <div class="tap-txt">🔍 لمس کن تا نقشت رو ببینی</div>
     </div>
     <div class="nav-row">
-      <button class="btn btn-ghost" onclick="prevP()">◀ قبلی</button>
-      <button class="btn btn-purple" id="roleNextBtn" onclick="nextP()">بعدی ▶</button>
+      <button class="btn b-lg b-dark" onclick="prevR()">◀ قبلی</button>
+      <button class="btn b-lg b-purple" id="rNext">بعدی ▶</button>
     </div>
   </div>
 </div>
 
-<!-- ══════ DISCUSSION ══════ -->
-<div class="screen" id="s-disc">
-  <div class="disc-top">
-    <div class="disc-loc">مکان: <b id="discLoc"></b></div>
+<!-- ══════ GAME ══════ -->
+<div class="scr" id="s4">
+  <div class="game-wrap">
+    <div class="round-badge" id="roundBadge">دور ۱</div>
+    <div class="word-display">
+      <div class="word-label">کلمه مخفی</div>
+      <div class="word-text" id="wordText"></div>
+    </div>
+    <div class="turn-box">
+      <div class="turn-label">الان نوبت این بازیکنه 👇</div>
+      <div class="turn-name" id="turnName"></div>
+      <div class="turn-instruct">یه کلمه مرتبط با کلمه مخفی بگو</div>
+    </div>
+    <div class="action-row">
+      <button class="btn b-lg b-green" onclick="nextTurn()">✅ بعدی</button>
+      <button class="btn b-lg b-red" onclick="go(5)">🗳 رأی‌گیری</button>
+    </div>
+    <div style="font-size:12px;color:var(--muted);text-align:center">جاسوس کلمه مخفی رو نمیدونه — مراقب باش!</div>
   </div>
-  <div class="timer-ring" id="timerRing">
-    <svg viewBox="0 0 172 172"><circle class="bg-ring" cx="86" cy="86" r="78"/><circle class="fg-ring" id="fgRing" cx="86" cy="86" r="78" stroke-dasharray="490" stroke-dashoffset="0"/></svg>
-    <div class="timer-text"><div class="timer-num" id="timerNum">05:00</div><div class="timer-label">زمان باقی‌مانده</div></div>
-  </div>
-  <div class="disc-warn">⚠️ جاسوس مکان رو نمیدونه — مراقب جواب‌هاش باش!</div>
-  <button class="btn btn-glow" id="discStart" onclick="startTimer()" style="margin-top:16px">⏱ شروع تایمر</button>
-  <button class="btn btn-red" onclick="go('s-vote')" style="margin-top:8px">🗳 رأی‌گیری</button>
 </div>
 
 <!-- ══════ VOTE ══════ -->
-<div class="screen" id="s-vote">
-  <div class="card card-glow">
-    <div class="section-title"><span class="icon">🗳</span>جاسوس کیه؟</div>
-    <div style="font-size:13px;color:var(--muted)">روی بازیکن کلیک کن — هر نفر یه رأی</div>
+<div class="scr" id="s5">
+  <div class="card">
+    <div class="card-h">🗳 جاسوس کیه؟</div>
+    <div style="font-size:13px;color:var(--muted)">روی بازیکن مورد نظر کلیک کن</div>
   </div>
-  <div class="vote-grid" id="vGrid"></div>
-  <button class="btn btn-red" id="voteBtn" onclick="showRes()" class="btn-disabled">🔍 نتیجه نهایی</button>
+  <div class="vgrid" id="vGrid"></div>
+  <button class="btn b-lg b-red b-off" id="vBtn" onclick="result()">🔍 نمایش نتیجه</button>
 </div>
 
 <!-- ══════ RESULT ══════ -->
-<div class="screen" id="s-result">
-  <div class="result-box" id="resBox"></div>
-  <button class="btn btn-glow" onclick="reset()" style="margin-top:24px">🔄 بازی جدید</button>
+<div class="scr" id="s6">
+  <div class="rbox" id="rBox"></div>
+  <button class="btn b-lg b-green" onclick="reset()" style="margin-top:24px">🔄 بازی جدید</button>
 </div>
 
 </div>
 
-<div class="confetti-box" id="confetti"></div>
+<div class="conf-box" id="confetti"></div>
 
 <script>
 // ═══════════════════════════════════════
-//  DATA
+//  WORD DATA — هر کلمه یه عنوان + زیرمجموعه
 // ═══════════════════════════════════════
-const CATEGORIES = {
-  '🏢 اداری': {
-    locations: [
-      {name:'اداره پست',hint:'نامه‌ها و بسته‌ها اینجا جابجا میشن'},
-      {name:'شرکت نرم‌افزاری',hint:'کامپیوتر و کد زدن'},
-      {name:'بانک',hint:'پول و حساب بانکی'},
-      {name:'بیمه',hint:'قرارداد و پوشش بیمه‌ای'},
-      {name:'دادگاه',hint:'قاضی و حکم'},
-      {name:'شهرداری',hint:'مجوز ساخت و ساز'},
-      {name:'هتل',hint:'اتاق و رزرو'},
-      {name:'آژانس مسافرتی',hint:'بلیط هواپیما و ویزا'},
-    ]
-  },
-  '🏥 پزشکی': {
-    locations: [
-      {name:'بیمارستان',hint:'عمل جراحی و اتاق عمل'},
-      {name:'داروخانه',hint:'دارو و نسخه پزشک'},
-      {name:'مطب دندانپزشکی',hint:'دندان و عصب کشی'},
-      {name:'کلینیک زیبایی',hint:'تزریق و زیبایی'},
-      {name:'آزمایشگاه',hint:'خون و آزمایش'},
-      {name:'اتاق اورژانس',hint:'حال بد و فوریت'},
-      {name:'رادیولوژی',hint:'عکس و اشعه ایکس'},
-      {name:'چشم‌پزشکی',hint:'عینک و بینایی'},
-    ]
-  },
-  '🏠 خانگی': {
-    locations: [
-      {name:'آشپزخانه',hint:'پختن غذا'},
-      {name:'اتاق خواب',hint:'خوابیدن'},
-      {name:'حمام',hint:'دوش و آب'},
-      {name:'حیاط خلوت',hint:'باغچه و درخت'},
-      {name:'گاراژ',hint:'ماشین و ابزار'},
-      {name:'انباری',hint:'جعبه و وسایل اضافی'},
-      {name:'زیرزمین',hint:'تاریک و زیر ساختمان'},
-      {name:'پشت‌بوم',hint:'بالای ساختمان'},
-    ]
-  },
-  '🎮 تفریحی': {
-    locations: [
-      {name:'سینما',hint:'فیلم و پاپ‌کورن'},
-      {name:'پارک',hint:'درخت و نیمکت'},
-      {name:'استخر',hint:'آب و شنا'},
-      {name:'باغ وحش',hint:'حیوانات'},
-      {name:'شهربازی',hint:'ترن هوایی'},
-      {name:'کتابخانه',hint:'سکوت و کتاب'},
-      {name:'ورزشگاه',hint:'توپ و ورزش'},
-      {name:'بیلیارد',hint:'چوب و توپ'},
-    ]
-  },
-  '🛒 خرید': {
-    locations: [
-      {name:'فروشگاه',hint:'خرید و قفسه'},
-      {name:'سوپرمارکت',hint:'مواد غذایی'},
-      {name:'نانوایی',hint:'نون تازه'},
-      {name:'پیتزا فروشی',hint:'پیتزا و خمیر'},
-      {name:'رستوران',hint:'غذا و سفارش'},
-      {name:'قهوه‌خانه',hint:'قهوه و فنجان'},
-      {name:'آرایشگاه',hint:'مو و اصلاح'},
-      {name:'کفش‌فروشی',hint:'کفش و پاپوش'},
-    ]
-  },
-  '🌍 شهری': {
-    locations: [
-      {name:'فرودگاه',hint:'هواپیما و پرواز'},
-      {name:'ایستگاه قطار',hint:'قطار و سکو'},
-      {name:'پمپ بنزین',hint:'بنزین و باک'},
-      {name:'آتش‌نشانی',hint:'آتش و ماشین آتش'},
-      {name:'کلانتری',hint:'پلیس و دستبند'},
-      {name:'زندان',hint:'پشت میله'},
-      {name:'پارکینگ',hint:'جای پارک ماشین'},
-      {name:'مونوریل',hint:'قطار هوایی'},
-    ]
-  },
-  '🏫 آموزشی': {
-    locations: [
-      {name:'مدرسه',hint:'تخته و کلاس'},
-      {name:'دانشگاه',hint:'استاد و امتحان'},
-      {name:'آموزشگاه رانندگی',hint:'فرمان و گواهینامه'},
-      {name:'آموزشگاه موسیقی',hint:'گیتار و نت'},
-      {name:'آزمون آیین‌نامه',hint:'سوال و گواهینامه'},
-      {name:'کلاس نقاشی',hint:'قلممو و رنگ'},
-    ]
-  },
-  '✈️ سفر': {
-    locations: [
-      {name:'چادر مسافرتی',hint:'طبیعت و شب'},
-      {name:'کشتی',hint:'دریا و موج'},
-      {name:'قایق',hint:'پارو و آب'},
-      {name:'جت‌اسکی',hint:'سرعت و آبی'},
-      {name:'چتر نجات',hint:'پرش از هواپیما'},
-      {name:'کوهنوردی',hint:'قله و کوله‌پشتی'},
-    ]
-  },
+const DATA = {
+  '🍎 میوه': ['سیب','موز','پرتقال','انگور','هندوانه','طالبی','انار','گلابی','خیار','بادوم','گردو','فندق','کیوی','آلبالو','شلیل'],
+  '🐱 حیوانات': ['گربه','سگ','شیر','خرس','فیل','گوزن','خرگوش','روباه','مار','عقاب','ماهی','لاک‌پشت','قورباغه','پروانه','морچه'],
+  '🚗 وسایل نقلیه': ['ماشین','اتوبوس','دوچرخه','قایق','هواپیما','قطار','موتور','کامیون','آمبولانس','آتش‌نشانی','ترن','چتر','قاطر','هلیکوپتر','کشتی'],
+  '🍕 غذاها': ['پیتزا','برگر','سوشی','کباب','آش','قورمه‌سبزی','زرشک‌پلو','فلافل','ساندویچ','پاستا','سوپ','سالاد','استیک','ریزوتو','لاتا'],
+  '⚽ ورزشها': ['فوتبال','بسکتبال','والیبال','شنا','دوچرخه‌سواری','شمشیربازی','کشتی','بوکس','تنیس','گلف','هندبال','پینگ‌پنگ','اسکی','چوگان','وزنه‌برداری'],
+  '👔 مشاغل': ['پزشک','مهندس','معلم','آشپز','راننده','نقاش','نجار','وکیل','پلیس','آتش‌نشان','خیاط','بنا','قاضی','عکاس','روان‌شناس'],
+  '🌍 شهرها': ['تهران','اصفهان','شیراز','تبریز','مشهد','استانبول','دبی','لندن','پاریس','توکیو','رم','نیویورک','مسکو','سئول','بارسلون'],
+  '🎸 موسیقی': ['گیتار','پیانو','درام','ویولن','بیس','ساکسیفون','ترومپت','فلوت','ارگ','سنتور','تار','سه‌تار','نی','دف','دمام'],
+  '🎨 رنگها': ['قرمز','آبی','سبز','زرد','نارنجی','بنفش','صورتی','قهوه‌ای','مشکی','سفید','طوسی','طلایی','نقره‌ای','فیروزه‌ای','یشمی'],
+  '🔧 ابزارآلات': ['چکش','پیچ‌گوشتی','اره','مته','انبر','متر','تراز','گونیا','سنباده','کاردک','پتک','سیم‌چین','هویه','پمپ','کمپرسور'],
 };
 
-let players=[], roles={}, spyIdx=-1, currentLoc=null, currentCat=null;
-let pIdx=0, votes={}, timer=null, timeLeft=300, usedLocations=new Set();
+// ═══════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════
+let players=[], spyIdx=-1, secretWord='', secretCat='', round=1, turnIdx=0;
+let voteMap={}, currentCat='';
 
 // ═══════════════════════════════════════
-//  NAVIGATION
+//  NAV
 // ═══════════════════════════════════════
-function go(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  if(id==='s-category') renderCats();
+function go(n){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  document.getElementById('s'+n).classList.add('on');
+  if(n===1)renderCats();
+  if(n===5)renderVote();
 }
 
 // ═══════════════════════════════════════
 //  CATEGORIES
 // ═══════════════════════════════════════
 function renderCats(){
-  const g=document.getElementById('catGrid');
-  g.innerHTML=Object.keys(CATEGORIES).map(k=>{
-    const cat=CATEGORIES[k];
-    const [icon,...name]=k.split(' ');
-    return `<div class="cat-btn ${currentCat===k?'selected':''}" onclick="selectCat('${k}')">
-      <div class="cat-icon">${icon}</div>
-      <div class="cat-name">${name.join(' ')}</div>
-      <div class="cat-count">${cat.locations.length} مکان</div>
+  document.getElementById('catGrid').innerHTML=Object.keys(DATA).map(k=>{
+    const[kIcon,...kName]=k.split(' ');
+    return `<div class="catb ${currentCat===k?'sel':''}" onclick="pickCat('${k}')">
+      <div class="catb-i">${kIcon}</div>
+      <div class="catb-n">${kName.join(' ')}</div>
     </div>`;
   }).join('');
 }
-
-function selectCat(k){
-  currentCat=k;
-  go('s-players');
-}
+function pickCat(k){currentCat=k;go(2)}
 
 // ═══════════════════════════════════════
 //  PLAYERS
 // ═══════════════════════════════════════
 function addP(){
-  const inp=document.getElementById('pInput');
-  const n=inp.value.trim();
+  const inp=document.getElementById('pInp'),n=inp.value.trim();
   if(!n||players.includes(n))return;
   players.push(n);inp.value='';renderP();
 }
-function removeP(n){players=players.filter(p=>p!==n);renderP()}
+function rmP(n){players=players.filter(p=>p!==n);renderP()}
 function renderP(){
   document.getElementById('pList').innerHTML=players.map((p,i)=>`
-    <div class="p-item">
-      <div class="p-left"><div class="p-num">${i+1}</div><div class="p-name">${p}</div></div>
-      <button class="p-del" onclick="removeP('${p}')">✕</button>
-    </div>`).join('');
-  document.getElementById('pCount').textContent=players.length;
-  const b=document.getElementById('startBtn');
-  players.length>=3?b.classList.remove('btn-disabled'):b.classList.add('btn-disabled');
+    <div class="pitm"><div class="pitm-l"><div class="pitm-n">${i+1}</div><div class="pitm-name">${p}</div></div><button class="pitm-x" onclick="rmP('${p}')">✕</button></div>`).join('');
+  document.getElementById('pCnt').textContent=players.length;
+  const b=document.getElementById('goBtn');
+  players.length>=3?b.classList.remove('b-off'):b.classList.add('b-off');
 }
 
 // ═══════════════════════════════════════
-//  GAME LOGIC
+//  GAME START
 // ═══════════════════════════════════════
 function beginGame(){
   if(players.length<3||!currentCat)return;
-  // pick location
-  const locs=CATEGORIES[currentCat].locations.filter(l=>!usedLocations.has(l.name));
-  if(locs.length===0){usedLocations.clear();return beginGame()}
-  currentLoc=locs[Math.floor(Math.random()*locs.length)];
-  usedLocations.add(currentLoc.name);
-  // pick spy
-  spyIdx=Math.floor(Math.random()*players.length);
-  roles={};players.forEach((p,i)=>roles[p]=i===spyIdx?'spy':'citizen');
-  players=shuffle([...players]);pIdx=0;votes={};
-  go('s-role');showRole();
-}
-
-function showRole(){
-  document.getElementById('rpName').textContent=players[pIdx];
-  document.getElementById('rpIdx').textContent=`(${pIdx+1}/${players.length})`;
-  const card=document.getElementById('roleCard');
-  card.className='role-card face-down';
-  card.innerHTML='<div class="role-big-icon">🕵️</div><div class="tap-hint">🔍 برای نمایش نقش کلیک کن</div>';
-  const btn=document.getElementById('roleNextBtn');
-  if(pIdx===players.length-1){btn.textContent='🎯 شروع بحث';btn.onclick=()=>go('s-disc')}
-  else{btn.textContent='بعدی ▶';btn.onclick=nextP}
-}
-
-function flipCard(){
-  const card=document.getElementById('roleCard');
-  if(!card.classList.contains('face-down'))return;
-  const p=players[pIdx],isSpy=roles[p]==='spy';
-  card.className=`role-card ${isSpy?'spy-card':'citizen-card'}`;
-  if(isSpy){
-    const cat=CATEGORIES[currentCat];
-    const otherLocs=cat.locations.filter(l=>l.name!==currentLoc.name);
-    const fakeHint=otherLocs[Math.floor(Math.random()*otherLocs.length)].hint;
-    card.innerHTML=`
-      <div class="role-big-icon">🕵️</div>
-      <div class="role-title" style="color:var(--red)">تو جاسوسی!</div>
-      <div class="role-hint-text">مکان بازی رو نمیدونی — حدس بزن!<br>یه هینت تصادفی: <b style="color:var(--gold)">"${fakeHint}"</b></div>`;
-  } else {
-    card.innerHTML=`
-      <div class="role-big-icon">👤</div>
-      <div class="role-title" style="color:var(--accent)">تو شهروندی</div>
-      <div class="role-loc">${currentLoc.name}</div>
-      <div class="role-hint-text">هینت: <b style="color:var(--gold)">${currentLoc.hint}</b><br>جاسوس رو پیدا کن!</div>`;
+  // pick random word from category
+  const words=DATA[currentCat];
+  secretWord=words[Math.floor(Math.random()*words.length)];
+  // pick spy — NEVER first player
+  let candidates=players.map((_,i)=>i).filter(i=>i!==0);
+  spyIdx=candidates[Math.floor(Math.random()*candidates.length)];
+  // shuffle for turns but spy never first
+  players=shuffle(players);
+  // make sure spy is not first
+  if(players.indexOf(players[spyIdx])===0){
+    // swap with someone else
+    const swap=players.length>1?1:0;
+    [players[0],players[swap]]=[players[swap],players[0]];
   }
+  // re-find spy index after shuffle
+  spyIdx=-1;
+  const origPlayers=players.slice();
+  // actually let's track differently
+  round=1;turnIdx=0;voteMap={};
+  // assign roles
+  roles={};
+  players.forEach((p,i)=>roles[p]=i===getSpyIndex()?true:false);
+  
+  // simpler: just assign spy
+  spyIdx=Math.floor(Math.random()*(players.length-1))+1; // never 0
+  roles={};players.forEach((p,i)=>roles[p]=i!==spyIdx);
+  
+  go(3);showRole();
 }
 
-function nextP(){
-  if(!document.getElementById('roleCard').classList.contains('face-down')){pIdx++;if(pIdx<players.length)showRole();return}
-  flipCard();
-}
-function prevP(){if(pIdx>0){pIdx--;showRole()}}
+function getSpyIndex(){return spyIdx}
 
 // ═══════════════════════════════════════
-//  TIMER
+//  ROLE REVEAL
 // ═══════════════════════════════════════
-function startTimer(){
-  document.getElementById('discLoc').textContent=currentLoc.name;
-  document.getElementById('discStart').style.display='none';
-  timeLeft=300;updateRing();
-  timer=setInterval(()=>{timeLeft--;updateRing();if(timeLeft<=0){clearInterval(timer);go('s-vote')}},1000);
+let ri=0;
+function showRole(){
+  ri=0;
+  document.getElementById('rName').textContent=players[0];
+  document.getElementById('rIdx').textContent=`(۱ / ${players.length})`;
+  const card=document.getElementById('rCard');
+  card.className='big-card face';
+  card.innerHTML='<div class="big-ico">🕵️</div><div class="tap-txt">🔍 لمس کن تا نقشت رو ببینی</div>';
+  setupNext();
 }
 
-function updateRing(){
-  const m=Math.floor(timeLeft/60).toString().padStart(2,'0');
-  const s=(timeLeft%60).toString().padStart(2,'0');
-  document.getElementById('timerNum').textContent=`${m}:${s}`;
-  const circ=document.getElementById('fgRing');
-  const offset=490*(1-timeLeft/300);
-  circ.style.strokeDashoffset=offset;
-  const num=document.getElementById('timerNum');
-  if(timeLeft<=60){circ.classList.add('warn');num.classList.add('warn')}
-  else{circ.classList.remove('warn');num.classList.remove('warn')}
+function flip(){
+  const card=document.getElementById('rCard');
+  if(!card.classList.contains('face'))return;
+  const p=players[ri],isSpy=!roles[p];
+  card.className=`big-card ${isSpy?'spy':'cit'}`;
+  card.innerHTML=isSpy?
+    `<div class="big-ico">🕵️</div><div class="big-title" style="color:var(--red)">تو جاسوسی!</div><div class="big-sub">کلمه مخفی رو نمیدونی<br>سعی کن از بقیه حدس بزنی!</div>`:
+    `<div class="big-ico">👤</div><div class="big-title" style="color:var(--accent)">تو شهروندی</div><div class="big-word">${secretWord}</div><div class="big-sub">کلمه مخفی: <b style="color:var(--accent)">${secretWord}</b><br>یه کلمه مرتبط بگو تا جاسوس نفهمه!</div>`;
+}
+
+function setupNext(){
+  const btn=document.getElementById('rNext');
+  if(ri===players.length-1){btn.textContent='🎯 شروع بازی';btn.onclick=()=>{turnIdx=0;go(4);showTurn()}}
+  else{btn.textContent='بعدی ▶';btn.onclick=nextR}
+}
+function nextR(){
+  if(!document.getElementById('rCard').classList.contains('face')){ri++;if(ri<players.length){showRoleAt(ri)}return}
+  flip();
+}
+function prevR(){if(ri>0){ri--;showRoleAt(ri)}}
+function showRoleAt(i){
+  ri=i;
+  document.getElementById('rName').textContent=players[i];
+  document.getElementById('rIdx').textContent=`(${i+1} / ${players.length})`;
+  const card=document.getElementById('rCard');
+  card.className='big-card face';
+  card.innerHTML='<div class="big-ico">🕵️</div><div class="tap-txt">🔍 لمس کن تا نقشت رو ببینی</div>';
+  setupNext();
+}
+
+// ═══════════════════════════════════════
+//  GAME PLAY
+// ═══════════════════════════════════════
+function showTurn(){
+  document.getElementById('roundBadge').textContent=`دور ${round}`;
+  document.getElementById('wordText').textContent=secretWord;
+  document.getElementById('turnName').textContent=players[turnIdx];
+}
+
+function nextTurn(){
+  turnIdx++;
+  if(turnIdx>=players.length){turnIdx=0;round++}
+  showTurn();
 }
 
 // ═══════════════════════════════════════
 //  VOTE
 // ═══════════════════════════════════════
-function go(id){
-  if(timer&&id!=='s-disc'){clearInterval(timer);timer=null}
-  if(id==='s-vote')renderVote();
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  if(id==='s-category')renderCats();
-}
-
 function renderVote(){
-  votes={};
+  voteMap={};
   document.getElementById('vGrid').innerHTML=players.map(p=>`
-    <div class="vote-btn" onclick="castVote('${p}',this)">
-      <div class="v-name">${p}</div>
-      <div class="v-count" id="vc-${p}">0</div>
+    <div class="vbtn" onclick="vote('${p}',this)">
+      <div class="vbtn-n">${p}</div>
+      <div class="vbtn-c" id="vc-${p}">0</div>
     </div>`).join('');
-  document.getElementById('voteBtn').classList.add('btn-disabled');
+  document.getElementById('vBtn').classList.add('b-off');
 }
-
-function castVote(name,el){
-  votes[name]=(votes[name]||0)+1;
-  document.getElementById(`vc-${name}`).textContent=votes[name];
-  el.classList.add('pressed');setTimeout(()=>el.classList.remove('pressed'),200);
-  if(Object.values(votes).reduce((a,b)=>a+b,0)>=players.length-1)
-    document.getElementById('voteBtn').classList.remove('btn-disabled');
+function vote(n,el){
+  voteMap[n]=(voteMap[n]||0)+1;
+  document.getElementById('vc-'+n).textContent=voteMap[n];
+  el.classList.add('on');setTimeout(()=>el.classList.remove('on'),200);
+  if(Object.values(voteMap).reduce((a,b)=>a+b,0)>=players.length-1)
+    document.getElementById('vBtn').classList.remove('b-off');
 }
 
 // ═══════════════════════════════════════
 //  RESULT
 // ═══════════════════════════════════════
-function showRes(){
-  let max=0,sus='';
-  for(const[n,c]of Object.entries(votes)){if(c>max){max=c;sus=n}}
-  const spy=players.find(p=>roles[p]==='spy');
-  const caught=sus===spy;
-  const box=document.getElementById('resBox');
+function result(){
+  let mx=0,sus='';
+  for(const[n,c]of Object.entries(voteMap)){if(c>mx){mx=c;sus=n}}
+  const spyP=players[spyIdx];
+  const caught=sus===spyP;
+  const box=document.getElementById('rBox');
   if(caught){
-    box.className='result-box win';
+    box.className='rbox win';
     box.innerHTML=`
-      <div class="r-icon">🎉</div>
+      <div class="r-ico">🎉</div>
       <div class="r-title" style="color:var(--accent)">جاسوس پیدا شد!</div>
-      <div class="r-sub">شهروندان پیروز شدند</div>
-      <div class="r-info"><div class="lbl">🕵️ جاسوس واقعی</div><div class="val" style="color:var(--red)">${spy}</div></div>
-      <div class="r-info"><div class="lbl">📍 مکان بازی</div><div class="val" style="color:var(--accent)">${currentLoc.name}</div></div>`;
+      <div class="r-sub">شهروندان برنده شدند — ${round} دور بازی شد</div>
+      <div class="r-row"><div class="lbl">🕵️ جاسوس</div><div class="val" style="color:var(--red)">${spyP}</div></div>
+      <div class="r-row"><div class="lbl">🎯 کلمه مخفی</div><div class="val" style="color:var(--accent)">${secretWord}</div></div>
+      <div class="r-row"><div class="lbl">📂 دسته</div><div class="val" style="color:var(--cyan)">${currentCat}</div></div>`;
     confetti();
   } else {
-    box.className='result-box lose';
+    box.className='rbox lose';
     box.innerHTML=`
-      <div class="r-icon">🕵️</div>
+      <div class="r-ico">🕵️</div>
       <div class="r-title" style="color:var(--red)">جاسوس فرار کرد!</div>
-      <div class="r-sub">${sus?`بازیکنان ${sus} رو متهم کردند`:'هیچ رأی‌ای داده نشد'}</div>
-      <div class="r-info"><div class="lbl">🕵️ جاسوس واقعی</div><div class="val" style="color:var(--red)">${spy}</div></div>
-      <div class="r-info"><div class="lbl">📍 مکان بازی</div><div class="val" style="color:var(--accent)">${currentLoc.name}</div></div>`;
+      <div class="r-sub">${sus?`${sus} متهم شد ولی جاسوس نبود`:'هیچکس رأی نگرفت'}</div>
+      <div class="r-row"><div class="lbl">🕵️ جاسوس واقعی</div><div class="val" style="color:var(--red)">${spyP}</div></div>
+      <div class="r-row"><div class="lbl">🎯 کلمه مخفی</div><div class="val" style="color:var(--accent)">${secretWord}</div></div>
+      <div class="r-row"><div class="lbl">📂 دسته</div><div class="val" style="color:var(--cyan)">${currentCat}</div></div>`;
   }
-  go('s-result');
+  go(6);
 }
 
-function reset(){
-  if(timer)clearInterval(timer);timer=null;
-  document.getElementById('discStart').style.display='';
-  document.getElementById('timerNum').classList.remove('warn');
-  document.getElementById('fgRing').classList.remove('warn');
-  document.getElementById('timerNum').textContent='05:00';
-  document.getElementById('fgRing').style.strokeDashoffset='0';
-  document.getElementById('voteBtn').classList.add('btn-disabled');
-  go('s-category');
-}
+function reset(){go(1)}
 
 // ═══════════════════════════════════════
 //  UTILS
@@ -587,11 +483,11 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
 
 function confetti(){
   const c=document.getElementById('confetti');c.innerHTML='';
-  const colors=['#00ff88','#ff2255','#8b5cf6','#fbbf24','#3b82f6','#fff'];
-  for(let i=0;i<60;i++){
+  const cols=['#00e87b','#ff1744','#a855f7','#f59e0b','#06b6d4','#fff'];
+  for(let i=0;i<70;i++){
     const el=document.createElement('div');el.className='conf';
     el.style.left=Math.random()*100+'%';el.style.top='-10px';
-    el.style.backgroundColor=colors[Math.floor(Math.random()*colors.length)];
+    el.style.backgroundColor=cols[Math.floor(Math.random()*cols.length)];
     el.style.animationDelay=Math.random()*2+'s';
     el.style.animationDuration=(2+Math.random()*2)+'s';
     c.appendChild(el);setTimeout(()=>el.remove(),5000);
