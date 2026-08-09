@@ -61,6 +61,13 @@ body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--txt)}
 .pcount{text-align:center;color:var(--mut);font-size:13px}
 .pcount b{color:var(--acc)}
 
+/* Preset buttons */
+.preset-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;justify-content:center}
+.preset-btn{padding:8px 14px;background:var(--srf);border:1px solid var(--bdr);border-radius:10px;font-family:'Vazirmatn',sans-serif;font-size:13px;color:var(--txt);cursor:pointer;transition:all .2s}
+.preset-btn:hover{border-color:var(--acc);color:var(--acc)}
+.preset-btn.added{opacity:.3;pointer-events:none;border-color:var(--acc);color:var(--acc)}
+.preset-label{font-size:12px;color:var(--mut);text-align:center;margin-top:8px}
+
 .cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;width:100%}
 .catb{padding:18px 12px;background:var(--srf);border:1.5px solid var(--bdr);border-radius:16px;cursor:pointer;transition:all .2s;text-align:center;font-family:'Vazirmatn',sans-serif}
 .catb:hover{border-color:var(--acc);transform:translateY(-2px)}
@@ -99,7 +106,6 @@ body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--txt)}
 .action-row{display:flex;gap:8px;width:100%}
 .action-row .btn{flex:1}
 
-/* Vote Timer */
 .vote-timer{width:100%;max-width:400px;display:flex;align-items:center;justify-content:center;gap:12px;padding:16px;background:var(--srf);border:1.5px solid var(--bdr);border-radius:16px}
 .vote-timer .vtime{font-size:36px;font-weight:900;font-variant-numeric:tabular-nums;color:var(--acc)}
 .vote-timer .vtime.warn{color:var(--red);animation:pulse .5s ease infinite}
@@ -109,8 +115,11 @@ body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--txt)}
 .vbtn{padding:18px 10px;background:var(--srf);border:2px solid var(--bdr);border-radius:16px;cursor:pointer;transition:all .2s;text-align:center;font-family:'Vazirmatn',sans-serif;color:var(--txt)}
 .vbtn:hover{border-color:var(--red)}
 .vbtn.on{border-color:var(--red);background:rgba(255,23,68,.08)}
+.vbtn.disabled{opacity:.3;pointer-events:none}
 .vbtn-n{font-size:16px;font-weight:600;margin-bottom:4px}
 .vbtn-c{font-size:28px;font-weight:900;color:var(--red)}
+.vote-counter{text-align:center;color:var(--mut);font-size:13px;margin:8px 0}
+.vote-counter b{color:var(--red)}
 
 .guess-box{width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;gap:16px}
 .guess-title{font-size:20px;font-weight:700;color:var(--red);text-align:center}
@@ -142,7 +151,6 @@ body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--txt)}
 .conf{position:absolute;width:8px;height:8px;border-radius:2px;animation:cfall 3s ease-out forwards}
 @keyframes cfall{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
 
-/* Challenge btn */
 .challenge-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:50;padding:14px 28px;background:linear-gradient(135deg,var(--red),#cc1133);color:#fff;border:none;border-radius:16px;font-family:'Vazirmatn',sans-serif;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 30px rgba(255,23,68,.4);display:none;animation:bounce 2s ease infinite}
 @keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-4px)}}
 .challenge-btn:active{transform:translateX(-50%) scale(.95)}
@@ -164,7 +172,7 @@ body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--txt)}
   <div style="margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
     <div style="padding:8px 14px;background:var(--srf);border:1px solid var(--bdr);border-radius:10px;font-size:12px;color:var(--mut)">👥 ۳-۱۲ نفره</div>
     <div style="padding:8px 14px;background:var(--srf);border:1px solid var(--bdr);border-radius:10px;font-size:12px;color:var(--mut)">🎯 ۱۵۰+ کلمه</div>
-    <div style="padding:8px 14px;background:var(--srf);border:1px solid var(--bdr);border-radius:10px;font-size:12px;color:var(--mut)">🕵️ جاسوس چالشی</div>
+    <div style="padding:8px 14px;background:var(--srf);border:1px solid var(--bdr);border-radius:10px;font-size:12px;color:var(--mut)">🕵️ چالشی</div>
   </div>
   <div id="homeScores" style="margin-top:24px;width:100%;max-width:340px;display:none">
     <div class="card" style="padding:14px">
@@ -188,6 +196,8 @@ body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--txt)}
       <input class="inp" id="pInp" placeholder="نام بازیکن..." onkeydown="if(event.key==='Enter')addP()">
       <button class="btn b-sm b-green" onclick="addP()">افزودن</button>
     </div>
+    <div class="preset-label">یا از اسم‌های آماده استفاده کن:</div>
+    <div class="preset-wrap" id="presetWrap"></div>
   </div>
   <div class="plist" id="pList"></div>
   <div class="pcount">تعداد: <b id="pCnt">0</b> بازیکن (حداقل ۳)</div>
@@ -227,7 +237,8 @@ body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--txt)}
 <!-- 5: Vote -->
 <div class="scr" id="s5">
   <div class="card"><div class="card-h">🗳 جاسوس کیه؟</div><div style="font-size:13px;color:var(--mut)">روی بازیکن مورد نظر کلیک کن</div></div>
-  <div class="vote-timer"><div style="font-size:13px;color:var(--mut)">زمان باقی‌مانده</div><div class="vtime" id="voteTimer">60</div><div style="font-size:13px;color:var(--mut)">ثانیه</div></div>
+  <div class="vote-timer"><div style="font-size:13px;color:var(--mut)">زمان</div><div class="vtime" id="voteTimer">60</div><div style="font-size:13px;color:var(--mut)">ثانیه</div></div>
+  <div class="vote-counter">رأی‌های باقی‌مانده: <b id="votesLeft"></b></div>
   <div class="vgrid" id="vGrid"></div>
   <button class="btn b-lg b-red b-off" id="vBtn" onclick="afterVote()">🔍 ادامه</button>
 </div>
@@ -269,51 +280,41 @@ body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--txt)}
 <button class="challenge-btn" id="challengeBtn" onclick="startChallenge()">🕵️ چالش جاسوس!</button>
 
 <script>
-// ═══════════════════════════════════════
-//  WORD DATA
-// ═══════════════════════════════════════
 const DATA={
 '🍎 میوه':['سیب','موز','پرتقال','انگور','هندوانه','طالبی','انار','گلابی','خیار','بادوم','گردو','فندق','کیوی','آلبالو','شلیل','خربزه','توت‌فرنگی','انبه','نارگیل','زیتون','لیمو','پسته','بادام','کشمش','توت','آلو','هلو','خرمالو','دستنبو','نخل','کام‌کوات','سالک','گواوا','پاپایا','ماگنولیا'],
-'🐱 حیوانات':['گربه','سگ','شیر','خرس','فیل','گوزن','خرگوش','روباه','مار','عقاب','ماهی','لاک‌پشت','قورباغه','پروانه','مورچه','زرافه','تمساح','شتر','بوف','جغد','سنجاب','گاو','اسب','گوسفند','خوک','خروس','بلبل','فاخته','طاووس','ببر','پلنگ','گرگ','گورخر','دلفین','فیل'],
-'🚗 وسایل نقلیه':['ماشین','اتوبوس','دوچرخه','قایق','هواپیما','قطار','موتور','کامیون','آمبولانس','آتش‌نشانی','ترن','هلیکوپتر','کشتی','زیردریایی','جت','اسکوتر','کاروان','تریلر','جت‌اسکی','پارو','کایت','چتر','تله‌کابین','مونوریل','فونیکولار','گوندولا','لوکوموتیو','اتوکار','وانت','سبک‌پوش'],
-'🍕 غذاها':['پیتза','برگر','سوشی','کباب','آش','قورمه‌سبزی','زرشک‌پلو','فلافل','ساندویچ','پاستا','سوپ','سالاد','استیک','ریزوتو','باقلا‌پلو','بیف‌استروگانف','کوفته','اشکنه','باقلی','ماکارونی','خورشت','کتلت','شامی','کوکو','املت','پنکیک','وافل','کراکف','دونات','چیزکیک','بستنی','کیک','ریشتو'],
-'⚽ ورزشها':['فوتبال','بسکتبال','والیبال','شنا','دوچرخه‌سواری','شمشیربازی','کشتی','بوکس','تنیس','گلف','هندبال','پینگ‌پنگ','اسکی','چوگان','وزنه‌برداری','تکواندو','جودو','کاراته','فوتسال','راگبی','کریکت','بیسبال','اسنوکر','ماهیگیری','شیرجه','غواصی','پاروزنی','سوارکاری','تیراندازی','تیر و کمان'],
-'👔 مشاغل':['پزشک','مهندس','معلم','آشپز','راننده','نقاش','نجار','وکیل','پلیس','آتش‌نشان','خیاط','بنا','قاضی','عکاس','روان‌شناس','برنامه‌نویس','حسابدار','آرایشگر','قصاب','نانوا','باغبان','کشاورز','صیاد','مکانیک','برقکار','لوله‌کش','نقشه‌کش','مهندس عمران','ویراستار','مترجم','خبرنگار'],
-'🌍 شهرها':['تهران','اصفهان','شیراز','تبریز','مشهد','استانبول','دبی','لندن','پاریس','توکیو','رم','نیویورک','مسکو','سئول','بارسلون','برلین','آمستردام','ونیز','روما','آتن','قاهره','کپنهاگ','ورشو','بوداپست','پراگ','وین','زوریخ','موناکو','دوحه','ریاض','مسقط','تفلیس'],
+'🐱 حیوانات':['گربه','سگ','شیر','خرس','فیل','گوزن','خرگوش','روباه','مار','عقاب','ماهی','لاک‌پشت','قورباغه','پروانه','مورچه','زرافه','تمساح','شتر','بوف','جغد','سنجاب','گاو','اسب','گوسفند','خوک','خروس','بلبل','فاخته','طاووس','ببر','پلنگ','گرگ','گورخر','دلفین'],
+'🚗 وسایل نقلیه':['ماشین','اتوبوس','دوچرخه','قایق','هواپیما','قطار','موتور','کامیون','آمبولانس','آتش‌نشانی','ترن','هلیکوپتر','کشتی','زیردریایی','جت','اسکوتر','کاروان','تریلر','جت‌اسکی','پارو','کایت','تله‌کابین','مونوریل','فونیکولار','گوندولا','لوکوموتیو','اتوکار','وانت','سبک‌پوش'],
+'🍕 غذاها':['پیتزا','برگر','سوشی','کباب','آش','قورمه‌سبزی','زرشک‌پلو','فلافل','ساندویچ','پاستا','سوپ','سالاد','استیک','ریزوتو','باقلا‌پلو','کوفته','اشکنه','ماکارونی','خورشت','کتلت','شامی','کوکو','املت','پنکیک','وافل','دونات','چیزکیک','بستنی','کیک','ریشتو'],
+'⚽ ورزشها':['فوتبال','بسکتبال','والیبال','شنا','دوچرخه‌سواری','شمشیربازی','کشتی','بوکس','تنیس','گلف','هندبال','پینگ‌پنگ','اسکی','چوگان','وزنه‌برداری','تکواندو','جودو','کاراته','فوتسال','راگبی','کریکت','بیسبال','اسنوکر','ماهیگیری','شیرجه','غواصی','پاروزنی','سوارکاری','تیراندازی'],
+'👔 مشاغل':['پزشک','مهندس','معلم','آشپز','راننده','نقاش','نجار','وکیل','پلیس','آتش‌نشان','خیاط','بنا','قاضی','عکاس','روان‌شناس','برنامه‌نویس','حسابدار','آرایشگر','قصاب','نانوا','باغبان','کشاورز','صیاد','مکانیک','برقکار','لوله‌کش','نقشه‌کش','مهندس عمران','ویراستار','مترجم'],
+'🌍 شهرها':['تهران','اصفهان','شیراز','تبریز','مشهد','استانبول','دبی','لندن','پاریس','توکیو','رم','نیویورک','مسکو','سئول','بارسلون','برلین','آمستردام','ونیز','روما','آتن','قاهره','کپنهاگ','ورشو','بوداپست','پراگ','وین','زوریخ','موناکو','دوحه','ریاض'],
 '🎸 موسیقی':['گیتار','پیانو','درام','ویولن','بیس','ساکسیفون','ترومپت','فلوت','ارگ','سنتور','تار','سه‌تار','نی','دف','تمبک','نی‌انبان','قانون','قیچک','کمانچه','دودوک','باغلاما','بوزوکی','همنگ','کیبورد','هارمونیکا','کلارینت','ابوا','هورن','تیمپانی','زیلوفون'],
-'🎨 رنگها':['قرمز','آبی','سبز','زرد','نارنجی','بنفش','صورتی','قهوه‌ای','مشکی','سفید','طوسی','طلایی','نقره‌ای','فیروزه‌ای','یشمی','لاجوردی','زرشکی','یاسی','آبی آسمانی','سبز زمردی','نعنایی','ماه‌تابی','خردلی','زرین','مسی','برنزی','کرم','بژ','کاراملی','شکلاتی','یاقوتی','مرجانی','سدری','گندمی'],
-'🔧 ابزارآلات':['چکش','پیچ‌گوشتی','اره','مته','انبر','متر','تراز','گونیا','سنباده','کاردک','پتک','سیم‌چین','هویه','پمپ','کمپرسور','آچار','دیسک‌بر','فرز','سنگ‌ساب','دریل','پیچ‌بکس','نوار‌چسب','چسب‌حرارتی','کاتر','خط‌کش','تراش','سوزن','میخ','پیچ','مهره','شیلنگ','فیلتر','شیرآلات'],
+'🎨 رنگها':['قرمز','آبی','سبز','زرد','نارنجی','بنفش','صورتی','قهوه‌ای','مشکی','سفید','طوسی','طلایی','نقره‌ای','فیروزه‌ای','یشمی','لاجوردی','زرشکی','یاسی','آبی آسمانی','سبز زمردی','نعنایی','ماه‌تابی','خردلی','زرین','مسی','برنزی','کرم','بژ','کاراملی','شکلاتی'],
+'🔧 ابزارآلات':['چکش','پیچ‌گوشتی','اره','مته','انبر','متر','تراز','گونیا','سنباده','کاردک','پتک','سیم‌چین','هویه','پمپ','کمپرسور','آچار','دیسک‌بر','فرز','سنگ‌ساب','دریل','پیچ‌بکس','نوار‌چسب','چسب‌حرارتی','کاتر','خط‌کش','تراش','سوزن','میخ','پیچ','مهره'],
 };
 
-// ═══════════════════════════════════════
-//  STATE
-// ═══════════════════════════════════════
+const PRESETS=['محمد','علی','رضا','امیر','حسین','حسن','سعید','مهدی','علیرضا','امیرحسین','یوسف','دارا','پارسا','آراد','آرش','بهنام','بهرام','پیمان','توما','جواد','حسام','خیلی','سینا','شهاب','صابر','فرهاد','کاوه','کیان','مرتضی','میلاد','نیما','هادی','یاشار','یونس','امیرعلی','پوریا'];
+
 let players=[],spyIndices=[],secretWord='',currentCat='',round=1,turnIdx=0;
 let roles={},voteMap={},scores={};
 let usedWords=new Set(),ri=0;
 let doubleSpy=false;
 let voteTimerInterval=null,voteTimeLeft=60;
 let gameActive=false;
+let totalVotesAllowed=0;
 
-// ═══════════════════════════════════════
-//  NAV
-// ═══════════════════════════════════════
 function go(n){
   document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
   document.getElementById('s'+n).classList.add('on');
   if(n===1)renderCats();
+  if(n===2)renderPresets();
   if(n===5){renderVote();startVoteTimer()}
   if(n===8)renderScores();
   if(n===0)renderHomeScores();
-  // show/hide challenge button
   document.getElementById('challengeBtn').style.display=(n===4&&gameActive)?'block':'none';
-  // stop vote timer when leaving vote screen
   if(n!==5)stopVoteTimer();
 }
 
-// ═══════════════════════════════════════
-//  CATEGORIES
-// ═══════════════════════════════════════
 function renderCats(){
   document.getElementById('catGrid').innerHTML=Object.keys(DATA).map(k=>{
     const[i,...n]=k.split(' ');
@@ -322,15 +323,26 @@ function renderCats(){
 }
 function pickCat(k){currentCat=k;go(2)}
 
-// ═══════════════════════════════════════
-//  PLAYERS
-// ═══════════════════════════════════════
+// ═══ PRESETS ═══
+function renderPresets(){
+  document.getElementById('presetWrap').innerHTML=PRESETS.map(name=>{
+    const added=players.includes(name);
+    return`<div class="preset-btn ${added?'added':''}" onclick="addPreset('${name}')">${name}</div>`;
+  }).join('');
+}
+function addPreset(name){
+  if(players.includes(name))return;
+  players.push(name);scores[name]=scores[name]||0;
+  renderP();renderPresets();
+}
+
+// ═══ PLAYERS ═══
 function addP(){
   const inp=document.getElementById('pInp'),n=inp.value.trim();
   if(!n||players.includes(n))return;
-  players.push(n);scores[n]=scores[n]||0;inp.value='';renderP();
+  players.push(n);scores[n]=scores[n]||0;inp.value='';renderP();renderPresets();
 }
-function rmP(n){players=players.filter(p=>p!==n);renderP()}
+function rmP(n){players=players.filter(p=>p!==n);renderP();renderPresets()}
 function renderP(){
   document.getElementById('pList').innerHTML=players.map((p,i)=>`<div class="pitm"><div class="pitm-l"><div class="pitm-n">${i+1}</div><div class="pitm-name">${p}</div></div><button class="pitm-x" onclick="rmP('${p}')">✕</button></div>`).join('');
   document.getElementById('pCnt').textContent=players.length;
@@ -338,38 +350,28 @@ function renderP(){
   document.getElementById('doubleSpyHint').style.display=players.length>=6?'block':'none';
 }
 
-// ═══════════════════════════════════════
-//  BEGIN GAME
-// ═══════════════════════════════════════
+// ═══ BEGIN ═══
 function beginGame(){
   if(players.length<3||!currentCat)return;
-  // pick word
   const avail=DATA[currentCat].filter(w=>!usedWords.has(w));
   if(avail.length===0){usedWords.clear();return beginGame()}
   secretWord=avail[Math.floor(Math.random()*avail.length)];
   usedWords.add(secretWord);
-  // double spy if 6+ players
   doubleSpy=players.length>=6;
   spyIndices=[];
   if(doubleSpy){
-    // pick 2 spies
     let pool=players.map((_,i)=>i).filter(i=>i!==0);
-    shuffle(pool);
-    spyIndices=[pool[0],pool[1]];
+    shuffle(pool);spyIndices=[pool[0],pool[1]];
   } else {
-    // pick 1 spy, never first
     let pool=players.map((_,i)=>i).filter(i=>i!==0);
     spyIndices=[pool[Math.floor(Math.random()*pool.length)]];
   }
-  // assign roles
   roles={};players.forEach((p,i)=>roles[p]=spyIndices.includes(i)?'spy':'citizen');
   round=1;turnIdx=0;voteMap={};gameActive=true;
   go(3);showRole();
 }
 
-// ═══════════════════════════════════════
-//  ROLE REVEAL
-// ═══════════════════════════════════════
+// ═══ ROLE ═══
 function showRole(){ri=0;showRoleAt(0)}
 function showRoleAt(i){
   ri=i;
@@ -402,9 +404,7 @@ function flip(){
 function nextR(){if(!document.getElementById('rCard').classList.contains('face')){ri++;if(ri<players.length)showRoleAt(ri);return}flip()}
 function prevR(){if(ri>0)showRoleAt(ri-1)}
 
-// ═══════════════════════════════════════
-//  GAME PLAY
-// ═══════════════════════════════════════
+// ═══ GAME ═══
 function showTurn(){
   document.getElementById('roundBadge').textContent=`دور ${round}`;
   document.getElementById('wordText').textContent=secretWord;
@@ -416,11 +416,8 @@ function nextTurn(){
   showTurn();
 }
 
-// ═══════════════════════════════════════
-//  CHALLENGE
-// ═══════════════════════════════════════
+// ═══ CHALLENGE ═══
 function startChallenge(){
-  // check if current player or any active player is spy
   gameActive=false;
   document.getElementById('challengeBtn').style.display='none';
   document.getElementById('guessSub').textContent='جاسوس می‌خواد وسط بازی کلمه رو حدس بزنه!';
@@ -428,75 +425,58 @@ function startChallenge(){
   go(6);
 }
 
-// ═══════════════════════════════════════
-//  VOTE
-// ═══════════════════════════════════════
+// ═══ VOTE ═══
 function renderVote(){
   voteMap={};
-  document.getElementById('vGrid').innerHTML=players.map(p=>`<div class="vbtn" onclick="vote('${p}',this)"><div class="vbtn-n">${p}</div><div class="vbtn-c" id="vc-${p}">0</div></div>`).join('');
+  totalVotesAllowed=players.length;
+  document.getElementById('votesLeft').textContent=totalVotesAllowed;
+  document.getElementById('vGrid').innerHTML=players.map(p=>`<div class="vbtn" id="vb-${p}" onclick="vote('${p}',this)"><div class="vbtn-n">${p}</div><div class="vbtn-c" id="vc-${p}">0</div></div>`).join('');
   document.getElementById('vBtn').classList.add('b-off');
 }
 function vote(n,el){
+  if(totalVotesAllowed<=0)return;
   voteMap[n]=(voteMap[n]||0)+1;
+  totalVotesAllowed--;
   document.getElementById('vc-'+n).textContent=voteMap[n];
+  document.getElementById('votesLeft').textContent=totalVotesAllowed;
   el.classList.add('on');setTimeout(()=>el.classList.remove('on'),200);
-  if(Object.values(voteMap).reduce((a,b)=>a+b,0)>=players.length-1)
+  // disable all buttons when no votes left
+  if(totalVotesAllowed<=0){
+    document.querySelectorAll('.vbtn').forEach(b=>b.classList.add('disabled'));
     document.getElementById('vBtn').classList.remove('b-off');
+  }
 }
 
-// Vote Timer
 function startVoteTimer(){
-  stopVoteTimer();
-  voteTimeLeft=60;
-  updateVoteTimerDisplay();
-  voteTimerInterval=setInterval(()=>{
-    voteTimeLeft--;
-    updateVoteTimerDisplay();
-    if(voteTimeLeft<=0){stopVoteTimer();afterVote()}
-  },1000);
+  stopVoteTimer();voteTimeLeft=60;updateVoteTimerDisplay();
+  voteTimerInterval=setInterval(()=>{voteTimeLeft--;updateVoteTimerDisplay();if(voteTimeLeft<=0){stopVoteTimer();afterVote()}},1000);
 }
 function stopVoteTimer(){if(voteTimerInterval){clearInterval(voteTimerInterval);voteTimerInterval=null}}
 function updateVoteTimerDisplay(){
-  const el=document.getElementById('voteTimer');
-  el.textContent=voteTimeLeft;
-  el.classList.toggle('warn',voteTimeLeft<=15);
+  const el=document.getElementById('voteTimer');el.textContent=voteTimeLeft;el.classList.toggle('warn',voteTimeLeft<=15);
 }
 
-// ═══════════════════════════════════════
-//  AFTER VOTE → GUESS
-// ═══════════════════════════════════════
+// ═══ AFTER VOTE ═══
 let spyCaught=false;
 function afterVote(){
   stopVoteTimer();
   let mx=0,sus='';
   for(const[n,c]of Object.entries(voteMap)){if(c>mx){mx=c;sus=n}}
-  // check if any spy was caught
   spyCaught=false;
-  const caughtName=sus;
-  spyIndices.forEach(si=>{
-    if(players[si]===caughtName)spyCaught=true;
-  });
+  spyIndices.forEach(si=>{if(players[si]===sus)spyCaught=true});
   document.getElementById('guessInp').value='';
   document.getElementById('guessSub').textContent='جاسوس کلمه‌ای که فکر می‌کنه مخفیه رو تایپ کنه';
   go(6);
 }
 
-// ═══════════════════════════════════════
-//  SPY GUESS RESULT
-// ═══════════════════════════════════════
+// ═══ SPY GUESS ═══
 function spyGuessed(correct){
-  gameActive=false;
-  document.getElementById('challengeBtn').style.display='none';
+  gameActive=false;document.getElementById('challengeBtn').style.display='none';
   const spyNames=spyIndices.map(i=>players[i]).join(' و ');
   let spyWins=correct;
   let citizensWin=spyCaught&&!correct;
-
-  if(spyWins){
-    spyIndices.forEach(si=>{scores[players[si]]=(scores[players[si]]||0)+1});
-  } else if(citizensWin){
-    players.forEach(p=>{if(!spyIndices.includes(players.indexOf(p)))scores[p]=(scores[p]||0)+1});
-  }
-
+  if(spyWins){spyIndices.forEach(si=>{scores[players[si]]=(scores[players[si]]||0)+1})}
+  else if(citizensWin){players.forEach((p,i)=>{if(!spyIndices.includes(i))scores[p]=(scores[p]||0)+1})}
   const box=document.getElementById('rBox');
   if(spyWins){
     box.className='rbox lose';
@@ -524,12 +504,9 @@ function spyGuessed(correct){
   }
   go(7);
 }
-
 function getTopVote(){let mx=0,s='';for(const[n,c]of Object.entries(voteMap)){if(c>mx){mx=c;s=n}}return s}
 
-// ═══════════════════════════════════════
-//  SCOREBOARD
-// ═══════════════════════════════════════
+// ═══ SCORES ═══
 function renderScores(){
   const sorted=Object.entries(scores).sort((a,b)=>b[1]-a[1]);
   document.getElementById('scoreGrid').innerHTML=sorted.map(([name,pts],i)=>{
@@ -545,21 +522,11 @@ function renderHomeScores(){
 }
 function resetAll(){scores={};players.forEach(p=>scores[p]=0);go(0)}
 
-// ═══════════════════════════════════════
-//  UTILS
-// ═══════════════════════════════════════
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function confetti(){
   const c=document.getElementById('confetti');c.innerHTML='';
   const cols=['#00e87b','#ff1744','#a855f7','#f59e0b','#06b6d4','#fff'];
-  for(let i=0;i<70;i++){
-    const el=document.createElement('div');el.className='conf';
-    el.style.left=Math.random()*100+'%';el.style.top='-10px';
-    el.style.backgroundColor=cols[Math.floor(Math.random()*cols.length)];
-    el.style.animationDelay=Math.random()*2+'s';
-    el.style.animationDuration=(2+Math.random()*2)+'s';
-    c.appendChild(el);setTimeout(()=>el.remove(),5000);
-  }
+  for(let i=0;i<70;i++){const el=document.createElement('div');el.className='conf';el.style.left=Math.random()*100+'%';el.style.top='-10px';el.style.backgroundColor=cols[Math.floor(Math.random()*cols.length)];el.style.animationDelay=Math.random()*2+'s';el.style.animationDuration=(2+Math.random()*2)+'s';c.appendChild(el);setTimeout(()=>el.remove(),5000)}
 }
 </script>
 </body>
