@@ -79,17 +79,24 @@ body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--txt)}
 .role-top{text-align:center}
 .role-top .name{font-size:22px;font-weight:700;color:var(--acc)}
 .role-top .idx{font-size:13px;color:var(--mut)}
-.big-card{width:100%;aspect-ratio:3/4;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;cursor:pointer;transition:all .6s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:hidden}
-.big-card.face{background:linear-gradient(135deg,var(--pur),#4c1d95);border:2px solid var(--pur);box-shadow:0 0 60px rgba(168,85,247,.2)}
-.big-card.face::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 12px,rgba(255,255,255,.02) 12px,rgba(255,255,255,.02) 24px);pointer-events:none}
-.big-card.face .big-ico{font-size:80px;opacity:.6}
-.big-card.face .tap-txt{font-size:15px;color:rgba(255,255,255,.6)}
-.big-card.spy{background:linear-gradient(160deg,#1a0010,#440022,#1a0010);border:2px solid var(--red);box-shadow:0 0 60px rgba(255,23,68,.2)}
-.big-card.cit{background:linear-gradient(160deg,#001a10,#004422,#001a10);border:2px solid var(--acc);box-shadow:0 0 60px rgba(0,232,123,.2)}
-.big-card .big-ico{font-size:80px}
-.big-card .big-title{font-size:30px;font-weight:900}
-.big-card .big-word{font-size:22px;font-weight:700;padding:10px 24px;background:rgba(0,232,123,.12);border-radius:12px;border:1px solid rgba(0,232,123,.2)}
-.big-card .big-sub{font-size:13px;color:var(--mut);text-align:center;line-height:1.8}
+.big-card{width:100%;aspect-ratio:3/4;border-radius:24px;cursor:pointer;position:relative;perspective:800px}
+.big-card-inner{width:100%;height:100%;position:relative;transition:transform .7s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
+.big-card.flipped .big-card-inner{transform:rotateY(180deg)}
+.big-card-front,.big-card-back{position:absolute;inset:0;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+.big-card-front{background:linear-gradient(135deg,var(--pur),#4c1d95);border:2px solid var(--pur);box-shadow:0 0 60px rgba(168,85,247,.2)}
+.big-card-front::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 12px,rgba(255,255,255,.02) 12px,rgba(255,255,255,.02) 24px);pointer-events:none}
+.big-card-front .big-ico{font-size:80px;opacity:.6;animation:floatIcon 3s ease-in-out infinite}
+@keyframes floatIcon{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-8px) scale(1.05)}}
+.big-card-front .tap-txt{font-size:15px;color:rgba(255,255,255,.6);animation:tapPulse 2s ease infinite}
+@keyframes tapPulse{0%,100%{opacity:.6}50%{opacity:1}}
+
+.big-card-back.spy{background:linear-gradient(160deg,#1a0010,#440022,#1a0010);border:2px solid var(--red);box-shadow:0 0 60px rgba(255,23,68,.2)}
+.big-card-back.cit{background:linear-gradient(160deg,#001a10,#004422,#001a10);border:2px solid var(--acc);box-shadow:0 0 60px rgba(0,232,123,.2)}
+.big-card-back{transform:rotateY(180deg)}
+.big-card-back .big-ico{font-size:80px}
+.big-card-back .big-title{font-size:30px;font-weight:900}
+.big-card-back .big-word{font-size:22px;font-weight:700;padding:10px 24px;background:rgba(0,232,123,.12);border-radius:12px;border:1px solid rgba(0,232,123,.2)}
+.big-card-back .big-sub{font-size:13px;color:var(--mut);text-align:center;line-height:1.8}
 .nav-row{display:flex;gap:8px;width:100%;max-width:380px}
 .nav-row .btn{flex:1}
 
@@ -209,7 +216,7 @@ body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--txt)}
 <div class="scr" id="s3">
   <div class="role-area">
     <div class="role-top"><div class="name" id="rName"></div><div class="idx" id="rIdx"></div></div>
-    <div class="big-card face" id="rCard" onclick="flip()"><div class="big-ico">🕵️</div><div class="tap-txt">🔍 لمس کن تا نقشت رو ببینی</div></div>
+    <div class="big-card" id="rCard" onclick="flip()"><div class="big-card-inner"><div class="big-card-front"><div class="big-ico">🕵️</div><div class="tap-txt">🔍 لمس کن تا نقشت رو ببینی</div></div><div class="big-card-back" id="rBack"></div></div></div>
     <div class="nav-row">
       <button class="btn b-lg b-dark" onclick="prevR()">◀ قبلی</button>
       <button class="btn b-lg b-purple" id="rNext">بعدی ▶</button>
@@ -377,30 +384,31 @@ function showRoleAt(i){
   document.getElementById('rName').textContent=players[i];
   document.getElementById('rIdx').textContent=`(${i+1} / ${players.length})`;
   const c=document.getElementById('rCard');
-  c.className='big-card face';
-  c.innerHTML='<div class="big-ico">🕵️</div><div class="tap-txt">🔍 لمس کن تا نقشت رو ببینی</div>';
+  c.classList.remove('flipped');
   const btn=document.getElementById('rNext');
   if(i===players.length-1){btn.textContent='🎯 شروع بازی';btn.onclick=()=>{turnIdx=0;go(4);showTurn()}}
   else{btn.textContent='بعدی ▶';btn.onclick=nextR}
 }
 function flip(){
   const c=document.getElementById('rCard');
-  if(!c.classList.contains('face'))return;
+  if(c.classList.contains('flipped'))return;
   const role=roles[players[ri]];
-  c.className=`big-card ${role==='spy'?'spy':'cit'}`;
+  const back=document.getElementById('rBack');
+  back.className=`big-card-back ${role==='spy'?'spy':'cit'}`;
   if(role==='spy'){
     const catName=currentCat.replace(/^.\s*/,'');
-    c.innerHTML=`<div class="big-ico">🕵️</div><div class="big-title" style="color:var(--red)">تو جاسوسی!</div>
+    back.innerHTML=`<div class="big-ico">🕵️</div><div class="big-title" style="color:var(--red)">تو جاسوسی!</div>
       <div style="padding:10px 20px;background:rgba(255,23,68,.12);border-radius:12px;border:1px solid rgba(255,23,68,.2)">
         <div style="font-size:12px;color:var(--mut)">دسته کلمات</div>
         <div style="font-size:20px;font-weight:700;color:var(--red);margin-top:4px">${catName}</div>
       </div>
       <div class="big-sub">کلمه مخفی رو نمیدونی<br>فقط دسته رو میدونی — سعی کن تظاهر کنی!</div>`;
   } else {
-    c.innerHTML=`<div class="big-ico">👤</div><div class="big-title" style="color:var(--acc)">تو شهروندی</div><div class="big-word">${secretWord}</div><div class="big-sub">کلمه مخفی: <b style="color:var(--acc)">${secretWord}</b><br>یه کلمه مرتبط بگو!</div>`;
+    back.innerHTML=`<div class="big-ico">👤</div><div class="big-title" style="color:var(--acc)">تو شهروندی</div><div class="big-word">${secretWord}</div><div class="big-sub">کلمه مخفی: <b style="color:var(--acc)">${secretWord}</b><br>یه کلمه مرتبط بگو!</div>`;
   }
+  c.classList.add('flipped');
 }
-function nextR(){if(!document.getElementById('rCard').classList.contains('face')){ri++;if(ri<players.length)showRoleAt(ri);return}flip()}
+function nextR(){if(!document.getElementById('rCard').classList.contains('flipped')){flip();return}ri++;if(ri<players.length)showRoleAt(ri)}
 function prevR(){if(ri>0)showRoleAt(ri-1)}
 
 // ═══ GAME ═══
