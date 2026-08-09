@@ -431,8 +431,8 @@ function spyGuessed(correct){
   let citizensWin=spyCaught && !correct;
 
   if(spyWins){
-    // spy wins — +3 to spy
-    scores[spyP]=(scores[spyP]||0)+3;
+    // spy wins — +1 to spy
+    scores[spyP]=(scores[spyP]||0)+1;
   } else if(citizensWin){
     // citizens caught spy and spy didn't guess — +1 to each citizen
     players.forEach(p=>{if(p!==spyP)scores[p]=(scores[p]||0)+1});
@@ -446,7 +446,7 @@ function spyGuessed(correct){
     box.innerHTML=`
       <div class="r-ico">🕵️</div>
       <div class="r-title" style="color:var(--red)">جاسوس برنده شد!</div>
-      <div class="r-sub">${spyP} تونست کلمه رو حدس بزنه — +۳ امتیاز</div>
+      <div class="r-sub">${spyP} تونست کلمه رو حدس بزنه — +۱ امتیاز</div>
       <div class="r-row"><div class="lbl">🕵️ جاسوس</div><div class="val" style="color:var(--red)">${spyP}</div></div>
       <div class="r-row"><div class="lbl">🎯 کلمه مخفی</div><div class="val" style="color:var(--acc)">${secretWord}</div></div>
       <div class="r-row"><div class="lbl">📅 دور</div><div class="val" style="color:var(--cyn)">${round}</div></div>`;
