@@ -7,209 +7,240 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕵️</text></svg>">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap');
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
 html,body{height:100%;overflow:hidden}
-:root{--bg:#050510;--srf:#0d0d20;--srf2:#131330;--bdr:#1a1a3a;--acc:#00e87b;--red:#ff1744;--pur:#a855f7;--gld:#f59e0b;--cyn:#06b6d4;--txt:#f0f0ff;--mut:#4a4a6e}
-body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--txt)}
-.world{position:fixed;inset:0;pointer-events:none;z-index:0}
-.world .orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:.08}
-.world .orb.a{width:500px;height:500px;background:var(--acc);top:-150px;right:-150px;animation:drift 25s ease-in-out infinite alternate}
-.world .orb.b{width:400px;height:400px;background:var(--red);bottom:-120px;left:-120px;animation:drift 30s ease-in-out infinite alternate-reverse}
-.world .orb.c{width:300px;height:300px;background:var(--pur);top:50%;left:40%;animation:drift 20s ease-in-out infinite alternate}
-@keyframes drift{0%{transform:translate(0,0)}50%{transform:translate(40px,-30px)}100%{transform:translate(-30px,40px)}}
-.world .lines{position:absolute;inset:0;background-image:linear-gradient(rgba(26,26,58,.4) 1px,transparent 1px),linear-gradient(90deg,rgba(26,26,58,.4) 1px,transparent 1px);background-size:56px 56px}
+:root{--bg:#050510;--srf:#0c0c22;--srf2:#111130;--bdr:#1e1e44;--acc:#00e87b;--red:#ff1744;--pur:#a855f7;--gld:#f59e0b;--cyn:#06b6d4;--txt:#f0f0ff;--mut:#4a4a6e}
+body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--txt);perspective:1200px}
+
+/* ═══ 3D WORLD ═══ */
+.world{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.world .orb{position:absolute;border-radius:50%;filter:blur(120px);opacity:.06;will-change:transform}
+.world .orb.a{width:600px;height:600px;background:var(--acc);top:-200px;right:-200px;animation:driftA 30s ease-in-out infinite}
+.world .orb.b{width:500px;height:500px;background:var(--red);bottom:-150px;left:-150px;animation:driftB 35s ease-in-out infinite}
+.world .orb.c{width:350px;height:350px;background:var(--pur);top:40%;left:30%;animation:driftC 25s ease-in-out infinite}
+@keyframes driftA{0%,100%{transform:translate3d(0,0,0) scale(1)}33%{transform:translate3d(50px,-40px,30px) scale(1.1)}66%{transform:translate3d(-30px,50px,-20px) scale(.95)}}
+@keyframes driftB{0%,100%{transform:translate3d(0,0,0) scale(1)}33%{transform:translate3d(-40px,30px,-20px) scale(1.05)}66%{transform:translate3d(60px,-50px,40px) scale(.9)}}
+@keyframes driftC{0%,100%{transform:translate3d(0,0,0) scale(1)}33%{transform:translate3d(30px,40px,20px) scale(1.15)}66%{transform:translate3d(-50px,-30px,-30px) scale(.85)}}
+.world .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(30,30,68,.2) 1px,transparent 1px),linear-gradient(90deg,rgba(30,30,68,.2) 1px,transparent 1px);background-size:60px 60px;transform:perspective(600px) rotateX(2deg);transform-origin:center bottom;mask-image:linear-gradient(to top,transparent 10%,black 50%);-webkit-mask-image:linear-gradient(to top,transparent 10%,black 50%)}
+.world .particles{position:absolute;inset:0}
+.ptcl{position:absolute;width:3px;height:3px;background:rgba(0,232,123,.3);border-radius:50%;animation:ptclUp linear infinite}
+@keyframes ptclUp{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-10vh) scale(1);opacity:0}}
+
 .app{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;overflow:hidden}
-.scr{display:none;flex-direction:column;align-items:center;padding:24px 16px;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;animation:rise .45s ease}
-.scr.on{display:flex}
-@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
 
-.landing{justify-content:center;gap:20px;text-align:center;padding-bottom:60px}
-.logo{font-size:100px;filter:drop-shadow(0 0 30px rgba(0,232,123,.4));animation:bob 4s ease-in-out infinite}
-@keyframes bob{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-8px) scale(1.03)}}
-.brand{font-size:52px;font-weight:900;background:linear-gradient(135deg,var(--acc),var(--cyn),var(--pur));background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gx 5s ease infinite}
-@keyframes gx{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-.sub{color:var(--mut);font-size:14px;letter-spacing:3px}
+/* ═══ SCREENS ═══ */
+.scr{display:none;flex-direction:column;align-items:center;padding:24px 16px;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.scr.on{display:flex;animation:scrIn .6s cubic-bezier(.22,1,.36,1)}
+@keyframes scrIn{from{opacity:0;transform:translateY(30px) scale(.97)}to{opacity:1;transform:none}}
 
-.btn{border:none;border-radius:16px;font-family:'Vazirmatn',sans-serif;font-weight:700;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
-.btn:active{transform:scale(.96)}
+/* ═══ 3D GLASS CARD ═══ */
+.card3d{width:100%;max-width:400px;background:linear-gradient(135deg,rgba(12,12,34,.85),rgba(17,17,48,.75));backdrop-filter:blur(20px);border:1px solid rgba(30,30,68,.6);border-radius:24px;padding:24px;box-shadow:0 8px 32px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.04);transform:translateZ(0);transition:transform .3s,box-shadow .3s}
+.card3d:active{transform:translateZ(-4px) scale(.98)}
+.card-h{font-size:18px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+
+/* ═══ 3D BUTTONS ═══ */
+.btn{border:none;border-radius:18px;font-family:'Vazirmatn',sans-serif;font-weight:700;cursor:pointer;position:relative;overflow:hidden;transform-style:preserve-3d;transition:all .25s cubic-bezier(.22,1,.36,1)}
+.btn::after{content:'';position:absolute;inset:0;border-radius:inherit;opacity:0;transition:opacity .25s;background:linear-gradient(135deg,rgba(255,255,255,.15),transparent)}
+.btn:active{transform:translateZ(-6px) scale(.95);box-shadow:0 2px 8px rgba(0,0,0,.3)!important}
+.btn:hover::after{opacity:1}
 .b-lg{width:100%;max-width:340px;padding:18px;font-size:18px}
 .b-sm{padding:10px 20px;font-size:14px;width:auto}
-.b-green{background:linear-gradient(135deg,var(--acc),#00c06a);color:#000;box-shadow:0 4px 30px rgba(0,232,123,.3)}
-.b-red{background:linear-gradient(135deg,var(--red),#cc1133);color:#fff;box-shadow:0 4px 30px rgba(255,23,68,.3)}
-.b-purple{background:linear-gradient(135deg,var(--pur),#7c3aed);color:#fff;box-shadow:0 4px 30px rgba(168,85,247,.3)}
-.b-gold{background:linear-gradient(135deg,var(--gld),#d97706);color:#000;box-shadow:0 4px 30px rgba(245,158,11,.3)}
-.b-dark{background:var(--srf2);color:var(--txt);border:1px solid var(--bdr)}
+.b-green{background:linear-gradient(145deg,#00ff8a,#00c06a);color:#000;box-shadow:0 6px 24px rgba(0,232,123,.35),0 2px 8px rgba(0,232,123,.2)}
+.b-red{background:linear-gradient(145deg,#ff2255,#cc1133);color:#fff;box-shadow:0 6px 24px rgba(255,23,68,.35),0 2px 8px rgba(255,23,68,.2)}
+.b-purple{background:linear-gradient(145deg,#b07aff,#7c3aed);color:#fff;box-shadow:0 6px 24px rgba(168,85,247,.35),0 2px 8px rgba(168,85,247,.2)}
+.b-gold{background:linear-gradient(145deg,#ffc233,#d97706);color:#000;box-shadow:0 6px 24px rgba(245,158,11,.35),0 2px 8px rgba(245,158,11,.2)}
+.b-dark{background:linear-gradient(145deg,var(--srf2),var(--srf));color:var(--txt);border:1px solid var(--bdr);box-shadow:0 4px 16px rgba(0,0,0,.3)}
 .b-dark:hover{border-color:var(--acc)}
-.b-off{opacity:.3;pointer-events:none}
+.b-off{opacity:.25;pointer-events:none}
 
-.card{width:100%;max-width:400px;background:rgba(13,13,32,.9);backdrop-filter:blur(16px);border:1px solid var(--bdr);border-radius:20px;padding:22px}
-.card-h{font-size:17px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-
+/* ═══ INPUT ═══ */
 .inp-wrap{display:flex;gap:8px}
-.inp{flex:1;padding:14px 16px;background:var(--bg);border:1.5px solid var(--bdr);border-radius:14px;color:var(--txt);font-family:'Vazirmatn',sans-serif;font-size:15px;outline:none;transition:border .2s}
-.inp:focus{border-color:var(--acc)}
+.inp{flex:1;padding:14px 18px;background:rgba(5,5,16,.6);border:1.5px solid var(--bdr);border-radius:16px;color:var(--txt);font-family:'Vazirmatn',sans-serif;font-size:15px;outline:none;transition:border .25s,box-shadow .25s}
+.inp:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(0,232,123,.1)}
 .inp::placeholder{color:var(--mut)}
 
-.plist{width:100%;max-width:400px;display:flex;flex-direction:column;gap:6px;margin:12px 0}
-.pitm{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;background:var(--srf);border:1px solid var(--bdr);border-radius:14px;animation:slIn .3s ease}
-@keyframes slIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
+/* ═══ 3D PLAYER ITEMS ═══ */
+.plist{width:100%;max-width:400px;display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.pitm{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:linear-gradient(135deg,rgba(12,12,34,.8),rgba(17,17,48,.7));border:1px solid var(--bdr);border-radius:16px;box-shadow:0 4px 16px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.03);animation:slIn .4s cubic-bezier(.22,1,.36,1);transform-style:preserve-3d;transition:transform .2s,box-shadow .2s}
+.pitm:active{transform:translateZ(-4px) scale(.98);box-shadow:0 2px 8px rgba(0,0,0,.2)}
+@keyframes slIn{from{opacity:0;transform:translateX(20px) rotateY(-5deg)}to{opacity:1;transform:none}}
 .pitm-l{display:flex;align-items:center;gap:10px}
-.pitm-n{width:32px;height:32px;background:var(--pur);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.pitm-n{width:34px;height:34px;background:linear-gradient(145deg,var(--pur),#7c3aed);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;box-shadow:0 4px 12px rgba(168,85,247,.3)}
 .pitm-name{font-weight:500;font-size:15px}
-.pitm-x{background:none;border:none;color:var(--red);font-size:18px;cursor:pointer;opacity:.5;padding:4px}
-.pitm-x:hover{opacity:1}
+.pitm-x{background:none;border:none;color:var(--red);font-size:18px;cursor:pointer;opacity:.4;padding:6px;border-radius:8px;transition:all .2s}
+.pitm-x:hover,.pitm-x:active{opacity:1;background:rgba(255,23,68,.1)}
 .pcount{text-align:center;color:var(--mut);font-size:13px}
 .pcount b{color:var(--acc)}
 
-/* Preset buttons */
+/* ═══ PRESETS ═══ */
 .preset-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;justify-content:center}
-.preset-btn{padding:8px 14px;background:var(--srf);border:1px solid var(--bdr);border-radius:10px;font-family:'Vazirmatn',sans-serif;font-size:13px;color:var(--txt);cursor:pointer;transition:all .2s}
-.preset-btn:hover{border-color:var(--acc);color:var(--acc)}
-.preset-btn.added{opacity:.3;pointer-events:none;border-color:var(--acc);color:var(--acc)}
+.preset-btn{padding:8px 14px;background:linear-gradient(135deg,rgba(12,12,34,.6),rgba(17,17,48,.5));border:1px solid var(--bdr);border-radius:12px;font-family:'Vazirmatn',sans-serif;font-size:13px;color:var(--txt);cursor:pointer;transition:all .25s;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.preset-btn:hover{border-color:var(--acc);color:var(--acc);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,232,123,.15)}
+.preset-btn:active{transform:scale(.95)}
+.preset-btn.added{opacity:.25;pointer-events:none;border-color:var(--acc)}
 .preset-label{font-size:12px;color:var(--mut);text-align:center;margin-top:8px}
 
-.cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;width:100%}
-.catb{padding:18px 12px;background:var(--srf);border:1.5px solid var(--bdr);border-radius:16px;cursor:pointer;transition:all .2s;text-align:center;font-family:'Vazirmatn',sans-serif}
-.catb:hover{border-color:var(--acc);transform:translateY(-2px)}
-.catb.sel{border-color:var(--acc);background:rgba(0,232,123,.06);box-shadow:0 0 24px rgba(0,232,123,.08)}
-.catb-i{font-size:32px;margin-bottom:6px}
-.catb-n{font-size:14px;font-weight:600}
+/* ═══ 3D CATEGORY ═══ */
+.cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;width:100%}
+.catb{padding:20px 12px;background:linear-gradient(145deg,rgba(12,12,34,.7),rgba(17,17,48,.6));border:1.5px solid var(--bdr);border-radius:18px;cursor:pointer;transition:all .3s cubic-bezier(.22,1,.36,1);text-align:center;font-family:'Vazirmatn',sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.03);transform-style:preserve-3d;position:relative;overflow:hidden}
+.catb::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,232,123,.08),transparent);opacity:0;transition:opacity .3s;pointer-events:none}
+.catb:hover{border-color:var(--acc);transform:translateY(-4px) translateZ(10px);box-shadow:0 8px 32px rgba(0,232,123,.15),0 4px 16px rgba(0,0,0,.2)}
+.catb:hover::before{opacity:1}
+.catb:active{transform:translateY(-2px) scale(.97)}
+.catb.sel{border-color:var(--acc);background:linear-gradient(145deg,rgba(0,232,123,.1),rgba(12,12,34,.7));box-shadow:0 0 40px rgba(0,232,123,.12),0 8px 32px rgba(0,0,0,.2)}
+.catb-i{font-size:36px;margin-bottom:8px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.3))}
+.catb-n{font-size:14px;font-weight:600;text-shadow:0 2px 4px rgba(0,0,0,.3)}
 
-.role-area{display:flex;flex-direction:column;align-items:center;gap:16px;width:100%;max-width:380px}
+/* ═══ 3D ROLE CARD ═══ */
+.role-area{display:flex;flex-direction:column;align-items:center;gap:20px;width:100%;max-width:380px}
 .role-top{text-align:center}
-.role-top .name{font-size:22px;font-weight:700;color:var(--acc)}
+.role-top .name{font-size:24px;font-weight:700;color:var(--acc);text-shadow:0 2px 8px rgba(0,232,123,.3)}
 .role-top .idx{font-size:13px;color:var(--mut)}
-.big-card{width:100%;aspect-ratio:3/4;border-radius:24px;cursor:pointer;position:relative;perspective:800px}
-.big-card-inner{width:100%;height:100%;position:relative;transition:transform .7s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
-.big-card.flipped .big-card-inner{transform:rotateY(180deg)}
-.big-card-front,.big-card-back{position:absolute;inset:0;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
-.big-card-front{background:linear-gradient(135deg,var(--pur),#4c1d95);border:2px solid var(--pur);box-shadow:0 0 60px rgba(168,85,247,.2)}
-.big-card-front::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 12px,rgba(255,255,255,.02) 12px,rgba(255,255,255,.02) 24px);pointer-events:none}
-.big-card-front .big-ico{font-size:80px;opacity:.6;animation:floatIcon 3s ease-in-out infinite}
-@keyframes floatIcon{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-8px) scale(1.05)}}
-.big-card-front .tap-txt{font-size:15px;color:rgba(255,255,255,.6);animation:tapPulse 2s ease infinite}
-@keyframes tapPulse{0%,100%{opacity:.6}50%{opacity:1}}
 
-.big-card-back.spy{background:linear-gradient(160deg,#1a0010,#440022,#1a0010);border:2px solid var(--red);box-shadow:0 0 60px rgba(255,23,68,.2)}
-.big-card-back.cit{background:linear-gradient(160deg,#001a10,#004422,#001a10);border:2px solid var(--acc);box-shadow:0 0 60px rgba(0,232,123,.2)}
+.big-card{width:100%;aspect-ratio:3/4;border-radius:28px;cursor:pointer;position:relative;perspective:1000px;transform-style:preserve-3d;filter:drop-shadow(0 20px 40px rgba(0,0,0,.4))}
+.big-card-inner{width:100%;height:100%;position:relative;transition:transform .8s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
+.big-card.flipped .big-card-inner{transform:rotateY(180deg)}
+.big-card-front,.big-card-back{position:absolute;inset:0;border-radius:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+.big-card-front{background:linear-gradient(160deg,#2d1b69,#1a103f,#0d0820);border:2px solid rgba(168,85,247,.4);box-shadow:inset 0 2px 0 rgba(255,255,255,.06),inset 0 -2px 0 rgba(0,0,0,.2),0 0 60px rgba(168,85,247,.15)}
+.big-card-front::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 14px,rgba(255,255,255,.015) 14px,rgba(255,255,255,.015) 28px);pointer-events:none}
+.big-card-front .big-ico{font-size:88px;filter:drop-shadow(0 8px 24px rgba(0,0,0,.4));animation:floatIcon 4s ease-in-out infinite}
+@keyframes floatIcon{0%,100%{transform:translateY(0) rotateY(0) scale(1)}25%{transform:translateY(-8px) rotateY(5deg) scale(1.03)}50%{transform:translateY(-12px) rotateY(0) scale(1.05)}75%{transform:translateY(-6px) rotateY(-5deg) scale(1.02)}}
+.big-card-front .tap-txt{font-size:15px;color:rgba(255,255,255,.5);animation:tapPulse 2.5s ease infinite}
+@keyframes tapPulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.03)}}
 .big-card-back{transform:rotateY(180deg)}
-.big-card-back .big-ico{font-size:80px}
-.big-card-back .big-title{font-size:30px;font-weight:900}
-.big-card-back .big-word{font-size:22px;font-weight:700;padding:10px 24px;background:rgba(0,232,123,.12);border-radius:12px;border:1px solid rgba(0,232,123,.2)}
+.big-card-back.spy{background:linear-gradient(160deg,#2a0015,#550025,#2a0015);border:2px solid rgba(255,23,68,.4);box-shadow:inset 0 2px 0 rgba(255,255,255,.04),inset 0 -2px 0 rgba(0,0,0,.3),0 0 60px rgba(255,23,68,.15)}
+.big-card-back.cit{background:linear-gradient(160deg,#001a10,#003d1f,#001a10);border:2px solid rgba(0,232,123,.4);box-shadow:inset 0 2px 0 rgba(255,255,255,.04),inset 0 -2px 0 rgba(0,0,0,.3),0 0 60px rgba(0,232,123,.15)}
+.big-card-back .big-ico{font-size:88px;filter:drop-shadow(0 8px 24px rgba(0,0,0,.4));animation:revealPop .6s cubic-bezier(.34,1.56,.64,1)}
+@keyframes revealPop{from{transform:scale(.3) rotate(-10deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+.big-card-back .big-title{font-size:32px;font-weight:900;text-shadow:0 4px 12px rgba(0,0,0,.3)}
+.big-card-back .big-word{font-size:24px;font-weight:700;padding:12px 28px;background:rgba(0,232,123,.1);border-radius:14px;border:1px solid rgba(0,232,123,.2);box-shadow:0 4px 16px rgba(0,232,123,.1);text-shadow:0 2px 4px rgba(0,0,0,.2)}
 .big-card-back .big-sub{font-size:13px;color:var(--mut);text-align:center;line-height:1.8}
-.nav-row{display:flex;gap:8px;width:100%;max-width:380px}
+.nav-row{display:flex;gap:10px;width:100%;max-width:380px}
 .nav-row .btn{flex:1}
 
-.game-wrap{width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;gap:14px}
-.word-display{width:100%;padding:24px;background:linear-gradient(135deg,var(--srf),var(--srf2));border:2px solid var(--bdr);border-radius:20px;text-align:center;position:relative;overflow:hidden}
-.word-display::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,232,123,.03),rgba(168,85,247,.03));pointer-events:none}
-.word-label{font-size:12px;color:var(--mut);margin-bottom:6px;letter-spacing:2px}
-.word-text{font-size:36px;font-weight:900;color:var(--acc);text-shadow:0 0 20px rgba(0,232,123,.3)}
-.turn-box{width:100%;padding:20px;background:var(--srf);border:1.5px solid var(--bdr);border-radius:16px;text-align:center}
-.turn-label{font-size:13px;color:var(--mut);margin-bottom:8px}
-.turn-name{font-size:28px;font-weight:900;color:var(--gld);text-shadow:0 0 20px rgba(245,158,11,.3)}
-.turn-instruct{font-size:13px;color:var(--mut);margin-top:8px}
-.round-badge{padding:8px 20px;background:var(--srf2);border:1px solid var(--bdr);border-radius:20px;font-size:14px;font-weight:600;color:var(--cyn)}
-.action-row{display:flex;gap:8px;width:100%}
+/* ═══ 3D GAME SCREEN ═══ */
+.game-wrap{width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.word-display{width:100%;padding:28px;background:linear-gradient(160deg,rgba(12,12,34,.85),rgba(17,17,48,.75));border:2px solid rgba(30,30,68,.6);border-radius:24px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.3),0 2px 8px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.04)}
+.word-display::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,232,123,.04),rgba(168,85,247,.04));pointer-events:none}
+.word-label{font-size:12px;color:var(--mut);margin-bottom:8px;letter-spacing:3px;text-transform:uppercase}
+.word-text{font-size:40px;font-weight:900;color:var(--acc);text-shadow:0 0 30px rgba(0,232,123,.3),0 4px 12px rgba(0,0,0,.3);animation:wordGlow 3s ease-in-out infinite}
+@keyframes wordGlow{0%,100%{text-shadow:0 0 30px rgba(0,232,123,.3),0 4px 12px rgba(0,0,0,.3)}50%{text-shadow:0 0 50px rgba(0,232,123,.5),0 4px 12px rgba(0,0,0,.3)}}
+
+.turn-box{width:100%;padding:24px;background:linear-gradient(145deg,rgba(12,12,34,.7),rgba(17,17,48,.6));border:1.5px solid var(--bdr);border-radius:20px;text-align:center;box-shadow:0 6px 24px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.03)}
+.turn-label{font-size:13px;color:var(--mut);margin-bottom:10px}
+.turn-name{font-size:30px;font-weight:900;color:var(--gld);text-shadow:0 0 30px rgba(245,158,11,.3),0 4px 12px rgba(0,0,0,.3);animation:namePulse 4s ease-in-out infinite}
+@keyframes namePulse{0%,100%{text-shadow:0 0 30px rgba(245,158,11,.3),0 4px 12px rgba(0,0,0,.3)}50%{text-shadow:0 0 50px rgba(245,158,11,.5),0 4px 12px rgba(0,0,0,.3)}}
+.turn-instruct{font-size:13px;color:var(--mut);margin-top:10px}
+.round-badge{padding:10px 24px;background:linear-gradient(135deg,rgba(6,182,212,.1),rgba(6,182,212,.05));border:1px solid rgba(6,182,212,.3);border-radius:24px;font-size:15px;font-weight:600;color:var(--cyn);box-shadow:0 4px 16px rgba(6,182,212,.1)}
+.action-row{display:flex;gap:10px;width:100%}
 .action-row .btn{flex:1}
 
-.vote-timer{width:100%;max-width:400px;display:flex;align-items:center;justify-content:center;gap:12px;padding:16px;background:var(--srf);border:1.5px solid var(--bdr);border-radius:16px}
-.vote-timer .vtime{font-size:36px;font-weight:900;font-variant-numeric:tabular-nums;color:var(--acc)}
-.vote-timer .vtime.warn{color:var(--red);animation:pulse .5s ease infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+/* ═══ 3D VOTE ═══ */
+.vote-timer{width:100%;max-width:400px;display:flex;align-items:center;justify-content:center;gap:14px;padding:18px;background:linear-gradient(145deg,rgba(12,12,34,.7),rgba(17,17,48,.6));border:1.5px solid var(--bdr);border-radius:20px;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.vote-timer .vtime{font-size:42px;font-weight:900;font-variant-numeric:tabular-nums;color:var(--acc);text-shadow:0 0 20px rgba(0,232,123,.3);transition:all .3s}
+.vote-timer .vtime.warn{color:var(--red);animation:timerWarn .4s ease infinite;text-shadow:0 0 20px rgba(255,23,68,.5)}
+@keyframes timerWarn{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 
-.vgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;width:100%;max-width:400px}
-.vbtn{padding:18px 10px;background:var(--srf);border:2px solid var(--bdr);border-radius:16px;cursor:pointer;transition:all .2s;text-align:center;font-family:'Vazirmatn',sans-serif;color:var(--txt)}
-.vbtn:hover{border-color:var(--red)}
-.vbtn.on{border-color:var(--red);background:rgba(255,23,68,.08)}
-.vbtn.disabled{opacity:.3;pointer-events:none}
-.vbtn-n{font-size:16px;font-weight:600;margin-bottom:4px}
-.vbtn-c{font-size:28px;font-weight:900;color:var(--red)}
-.vote-counter{text-align:center;color:var(--mut);font-size:13px;margin:8px 0}
+.vote-counter{text-align:center;color:var(--mut);font-size:13px;margin:6px 0}
 .vote-counter b{color:var(--red)}
 
-.guess-box{width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;gap:16px}
-.guess-title{font-size:20px;font-weight:700;color:var(--red);text-align:center}
+.vgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;width:100%;max-width:400px}
+.vbtn{padding:20px 10px;background:linear-gradient(145deg,rgba(12,12,34,.7),rgba(17,17,48,.6));border:2px solid var(--bdr);border-radius:18px;cursor:pointer;transition:all .3s cubic-bezier(.22,1,.36,1);text-align:center;font-family:'Vazirmatn',sans-serif;color:var(--txt);box-shadow:0 4px 16px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.03);transform-style:preserve-3d}
+.vbtn:hover{border-color:var(--red);transform:translateY(-3px) translateZ(8px);box-shadow:0 8px 32px rgba(255,23,68,.15)}
+.vbtn:active{transform:translateY(-1px) scale(.97)}
+.vbtn.on{border-color:var(--red);background:linear-gradient(145deg,rgba(255,23,68,.12),rgba(12,12,34,.7));box-shadow:0 0 24px rgba(255,23,68,.15),0 4px 16px rgba(0,0,0,.2)}
+.vbtn.disabled{opacity:.25;pointer-events:none}
+.vbtn-n{font-size:16px;font-weight:600;margin-bottom:6px}
+.vbtn-c{font-size:30px;font-weight:900;color:var(--red);text-shadow:0 2px 8px rgba(255,23,68,.3)}
+
+/* ═══ GUESS ═══ */
+.guess-box{width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;gap:18px}
+.guess-title{font-size:22px;font-weight:700;color:var(--red);text-shadow:0 2px 8px rgba(255,23,68,.3)}
 .guess-sub{font-size:14px;color:var(--mut);text-align:center}
-.guess-input{width:100%;padding:16px;background:var(--srf);border:2px solid var(--red);border-radius:16px;color:var(--txt);font-family:'Vazirmatn',sans-serif;font-size:20px;text-align:center;outline:none}
-.guess-input::placeholder{color:var(--mut);font-size:16px}
 
-.score-grid{width:100%;max-width:400px;display:flex;flex-direction:column;gap:6px}
-.score-item{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--srf);border:1px solid var(--bdr);border-radius:14px}
-.score-left{display:flex;align-items:center;gap:10px}
-.score-num{width:32px;height:32px;background:var(--pur);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+/* ═══ 3D SCORE ═══ */
+.score-grid{width:100%;max-width:400px;display:flex;flex-direction:column;gap:8px}
+.score-item{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:linear-gradient(145deg,rgba(12,12,34,.8),rgba(17,17,48,.7));border:1px solid var(--bdr);border-radius:16px;box-shadow:0 4px 16px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.03);transition:transform .2s}
+.score-item:active{transform:scale(.98)}
+.score-left{display:flex;align-items:center;gap:12px}
+.score-num{width:36px;height:36px;background:linear-gradient(145deg,var(--pur),#7c3aed);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;box-shadow:0 4px 12px rgba(168,85,247,.3)}
 .score-name{font-weight:600;font-size:15px}
-.score-val{font-size:22px;font-weight:900;color:var(--gld)}
-.score-item.spy-row{border-color:var(--red);background:rgba(255,23,68,.05)}
-.score-item.spy-row .score-num{background:var(--red)}
+.score-val{font-size:24px;font-weight:900;color:var(--gld);text-shadow:0 2px 8px rgba(245,158,11,.3)}
+.score-item.spy-row{border-color:rgba(255,23,68,.3);background:linear-gradient(145deg,rgba(255,23,68,.08),rgba(12,12,34,.8))}
+.score-item.spy-row .score-num{background:linear-gradient(145deg,var(--red),#cc1133);box-shadow:0 4px 12px rgba(255,23,68,.3)}
 
-.rbox{width:100%;max-width:380px;padding:32px 20px;border-radius:24px;text-align:center;animation:popIn .5s cubic-bezier(.34,1.56,.64,1)}
-@keyframes popIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
-.rbox.win{background:linear-gradient(160deg,#00120a,#003318);border:2px solid var(--acc);box-shadow:0 0 80px rgba(0,232,123,.12)}
-.rbox.lose{background:linear-gradient(160deg,#1a0010,#440020);border:2px solid var(--red);box-shadow:0 0 80px rgba(255,23,68,.12)}
-.r-ico{font-size:90px;margin-bottom:12px}
-.r-title{font-size:28px;font-weight:900;margin-bottom:6px}
-.r-sub{font-size:14px;color:var(--mut);margin-bottom:20px}
-.r-row{padding:14px;background:rgba(0,0,0,.25);border-radius:12px;margin-top:10px}
-.r-row .lbl{font-size:11px;color:var(--mut)}
-.r-row .val{font-size:20px;font-weight:700;margin-top:4px}
+/* ═══ 3D RESULT ═══ */
+.rbox{width:100%;max-width:380px;padding:36px 24px;border-radius:28px;text-align:center;animation:resIn .7s cubic-bezier(.34,1.56,.64,1);box-shadow:0 20px 60px rgba(0,0,0,.4)}
+@keyframes resIn{from{opacity:0;transform:scale(.6) rotateY(-15deg)}to{opacity:1;transform:none}}
+.rbox.win{background:linear-gradient(160deg,#001a0f,#003d1f,#001a0f);border:2px solid rgba(0,232,123,.4);box-shadow:0 0 80px rgba(0,232,123,.1),0 20px 60px rgba(0,0,0,.4)}
+.rbox.lose{background:linear-gradient(160deg,#2a0015,#550025,#2a0015);border:2px solid rgba(255,23,68,.4);box-shadow:0 0 80px rgba(255,23,68,.1),0 20px 60px rgba(0,0,0,.4)}
+.r-ico{font-size:96px;margin-bottom:16px;animation:icoCelebrate .8s cubic-bezier(.34,1.56,.64,1)}
+@keyframes icoCelebrate{from{transform:scale(.3) rotate(-20deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+.r-title{font-size:30px;font-weight:900;margin-bottom:8px;text-shadow:0 4px 12px rgba(0,0,0,.3)}
+.r-sub{font-size:14px;color:var(--mut);margin-bottom:24px;line-height:1.8}
+.r-row{padding:16px;background:rgba(0,0,0,.2);border-radius:14px;margin-top:12px;border:1px solid rgba(255,255,255,.03)}
+.r-row .lbl{font-size:11px;color:var(--mut);margin-bottom:4px}
+.r-row .val{font-size:22px;font-weight:700;text-shadow:0 2px 8px rgba(0,0,0,.3)}
 
+/* ═══ CONFETTI ═══ */
 .conf-box{position:fixed;inset:0;pointer-events:none;z-index:99}
-.conf{position:absolute;width:8px;height:8px;border-radius:2px;animation:cfall 3s ease-out forwards}
-@keyframes cfall{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+.conf{position:absolute;border-radius:3px;animation:cfall 3.5s ease-out forwards}
+@keyframes cfall{0%{transform:translateY(-20px) rotate(0) scale(1);opacity:1}100%{transform:translateY(110vh) rotate(1080deg) scale(.5);opacity:0}}
 
-.challenge-btn{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:50;padding:14px 28px;background:linear-gradient(135deg,var(--red),#cc1133);color:#fff;border:none;border-radius:16px;font-family:'Vazirmatn',sans-serif;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 30px rgba(255,23,68,.4);display:none;animation:bounce 2s ease infinite}
-@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-4px)}}
-.challenge-btn:active{transform:translateX(-50%) scale(.95)}
+/* ═══ CHALLENGE ═══ */
+.challenge-btn{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:50;padding:16px 32px;background:linear-gradient(145deg,#ff2255,#cc1133);color:#fff;border:none;border-radius:20px;font-family:'Vazirmatn',sans-serif;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 8px 32px rgba(255,23,68,.4),0 2px 8px rgba(255,23,68,.2);display:none;animation:chBounce 2.5s ease infinite}
+@keyframes chBounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-6px)}}
+.challenge-btn:active{transform:translateX(-50%) scale(.93)}
 
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:2px}
 </style>
 </head>
 <body>
-<div class="world"><div class="orb a"></div><div class="orb b"></div><div class="orb c"></div><div class="lines"></div></div>
+<div class="world">
+  <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
+  <div class="grid"></div>
+  <div class="particles" id="particles"></div>
+</div>
 <div class="app">
 
 <!-- 0: Landing -->
-<div class="scr on landing" id="s0">
-  <div class="logo">🕵️</div>
-  <div class="brand">SpyGK</div>
-  <div class="sub">جاسوس کیه؟</div>
+<div class="scr on landing" id="s0" style="justify-content:center;gap:20px;text-align:center;padding-bottom:60px">
+  <div style="font-size:110px;filter:drop-shadow(0 12px 40px rgba(0,232,123,.35));animation:bob 5s ease-in-out infinite">🕵️</div>
+  <div style="font-size:56px;font-weight:900;background:linear-gradient(135deg,var(--acc),var(--cyn),var(--pur));background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gx 6s ease infinite;filter:drop-shadow(0 4px 12px rgba(0,232,123,.2))">SpyGK</div>
+  <div style="color:var(--mut);font-size:14px;letter-spacing:4px;text-transform:uppercase">جاسوس کیه؟</div>
   <button class="btn b-lg b-green" onclick="go(1)" style="margin-top:40px">🎮 شروع بازی</button>
-  <div style="margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-    <div style="padding:8px 14px;background:var(--srf);border:1px solid var(--bdr);border-radius:10px;font-size:12px;color:var(--mut)">👥 ۳-۱۲ نفره</div>
-    <div style="padding:8px 14px;background:var(--srf);border:1px solid var(--bdr);border-radius:10px;font-size:12px;color:var(--mut)">🎯 ۱۵۰+ کلمه</div>
-    <div style="padding:8px 14px;background:var(--srf);border:1px solid var(--bdr);border-radius:10px;font-size:12px;color:var(--mut)">🕵️ چالشی</div>
+  <div style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <div style="padding:10px 16px;background:linear-gradient(145deg,rgba(12,12,34,.7),rgba(17,17,48,.6));border:1px solid var(--bdr);border-radius:14px;font-size:13px;color:var(--mut);box-shadow:0 4px 12px rgba(0,0,0,.2)">👥 ۳-۱۲ نفره</div>
+    <div style="padding:10px 16px;background:linear-gradient(145deg,rgba(12,12,34,.7),rgba(17,17,48,.6));border:1px solid var(--bdr);border-radius:14px;font-size:13px;color:var(--mut);box-shadow:0 4px 12px rgba(0,0,0,.2)">🎯 ۱۵۰+ کلمه</div>
+    <div style="padding:10px 16px;background:linear-gradient(145deg,rgba(12,12,34,.7),rgba(17,17,48,.6));border:1px solid var(--bdr);border-radius:14px;font-size:13px;color:var(--mut);box-shadow:0 4px 12px rgba(0,0,0,.2)">🕵️ چالشی</div>
   </div>
   <div id="homeScores" style="margin-top:24px;width:100%;max-width:340px;display:none">
-    <div class="card" style="padding:14px">
-      <div style="font-size:13px;font-weight:700;color:var(--gld);margin-bottom:8px;text-align:center">🏆 جدول امتیازات</div>
-      <div id="homeScoreList"></div>
-    </div>
+    <div class="card3d" style="padding:16px"><div style="font-size:14px;font-weight:700;color:var(--gld);margin-bottom:10px;text-align:center">🏆 جدول امتیازات</div><div id="homeScoreList"></div></div>
   </div>
 </div>
 
+@keyframes bob{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.03)}}
+@keyframes gx{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+
 <!-- 1: Category -->
 <div class="scr" id="s1">
-  <div class="card"><div class="card-h">📂 دسته‌بندی کلمات</div><div class="cat-grid" id="catGrid"></div></div>
-  <button class="btn b-lg b-dark" onclick="go(0)" style="margin-top:12px">بازگشت</button>
+  <div class="card3d"><div class="card-h">📂 دسته‌بندی کلمات</div><div class="cat-grid" id="catGrid"></div></div>
+  <button class="btn b-lg b-dark" onclick="go(0)" style="margin-top:14px">بازگشت</button>
 </div>
 
 <!-- 2: Players -->
 <div class="scr" id="s2">
-  <div class="card">
+  <div class="card3d">
     <div class="card-h">👥 بازیکنان</div>
-    <div class="inp-wrap">
-      <input class="inp" id="pInp" placeholder="نام بازیکن..." onkeydown="if(event.key==='Enter')addP()">
-      <button class="btn b-sm b-green" onclick="addP()">افزودن</button>
-    </div>
-    <div class="preset-label">یا از اسم‌های آماده استفاده کن:</div>
+    <div class="inp-wrap"><input class="inp" id="pInp" placeholder="نام بازیکن..." onkeydown="if(event.key==='Enter')addP()"><button class="btn b-sm b-green" onclick="addP()">افزودن</button></div>
+    <div class="preset-label">یا از آماده‌ها استفاده کن:</div>
     <div class="preset-wrap" id="presetWrap"></div>
   </div>
   <div class="plist" id="pList"></div>
   <div class="pcount">تعداد: <b id="pCnt">0</b> بازیکن (حداقل ۳)</div>
-  <div id="doubleSpyHint" style="display:none;margin-top:8px;padding:10px 16px;background:rgba(255,23,68,.08);border:1px solid rgba(255,23,68,.2);border-radius:12px;font-size:12px;color:var(--red);text-align:center">👥 ۶ نفر به بالا — حالت جاسوس دوبل فعال میشه!</div>
-  <button class="btn b-lg b-green b-off" id="goBtn" onclick="beginGame()">🎯 انتخاب نقش‌ها</button>
+  <div id="doubleSpyHint" style="display:none;margin-top:10px;padding:12px 18px;background:linear-gradient(145deg,rgba(255,23,68,.08),rgba(12,12,34,.7));border:1px solid rgba(255,23,68,.2);border-radius:14px;font-size:13px;color:var(--red);text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.2)">👥 ۶ نفر به بالا — حالت جاسوس دوبل فعال!</div>
+  <button class="btn b-lg b-green b-off" id="goBtn" onclick="beginGame()" style="margin-top:12px">🎯 انتخاب نقش‌ها</button>
 </div>
 
 <!-- 3: Role -->
@@ -217,10 +248,7 @@ body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--txt)}
   <div class="role-area">
     <div class="role-top"><div class="name" id="rName"></div><div class="idx" id="rIdx"></div></div>
     <div class="big-card" id="rCard" onclick="flip()"><div class="big-card-inner"><div class="big-card-front"><div class="big-ico">🕵️</div><div class="tap-txt">🔍 لمس کن تا نقشت رو ببینی</div></div><div class="big-card-back" id="rBack"></div></div></div>
-    <div class="nav-row">
-      <button class="btn b-lg b-dark" onclick="prevR()">◀ قبلی</button>
-      <button class="btn b-lg b-purple" id="rNext">بعدی ▶</button>
-    </div>
+    <div class="nav-row"><button class="btn b-lg b-dark" onclick="prevR()">◀ قبلی</button><button class="btn b-lg b-purple" id="rNext">بعدی ▶</button></div>
   </div>
 </div>
 
@@ -229,56 +257,42 @@ body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--txt)}
   <div class="game-wrap">
     <div class="round-badge" id="roundBadge">دور ۱</div>
     <div class="word-display"><div class="word-label">کلمه مخفی</div><div class="word-text" id="wordText"></div></div>
-    <div class="turn-box">
-      <div class="turn-label">الان نوبت این بازیکنه 👇</div>
-      <div class="turn-name" id="turnName"></div>
-      <div class="turn-instruct">یه کلمه مرتبط با کلمه مخفی بگو</div>
-    </div>
-    <div class="action-row">
-      <button class="btn b-lg b-green" onclick="nextTurn()">✅ بعدی</button>
-      <button class="btn b-lg b-red" onclick="go(5)">🗳 رأی‌گیری</button>
-    </div>
+    <div class="turn-box"><div class="turn-label">الان نوبت این بازیکنه 👇</div><div class="turn-name" id="turnName"></div><div class="turn-instruct">یه کلمه مرتبط با کلمه مخفی بگو</div></div>
+    <div class="action-row"><button class="btn b-lg b-green" onclick="nextTurn()">✅ بعدی</button><button class="btn b-lg b-red" onclick="go(5)">🗳 رأی‌گیری</button></div>
   </div>
 </div>
 
 <!-- 5: Vote -->
 <div class="scr" id="s5">
-  <div class="card"><div class="card-h">🗳 جاسوس کیه؟</div><div style="font-size:13px;color:var(--mut)">روی بازیکن مورد نظر کلیک کن</div></div>
+  <div class="card3d"><div class="card-h">🗳 جاسوس کیه؟</div><div style="font-size:13px;color:var(--mut)">روی بازیکن مورد نظر کلیک کن</div></div>
   <div class="vote-timer"><div style="font-size:13px;color:var(--mut)">زمان</div><div class="vtime" id="voteTimer">60</div><div style="font-size:13px;color:var(--mut)">ثانیه</div></div>
   <div class="vote-counter">رأی‌های باقی‌مانده: <b id="votesLeft"></b></div>
   <div class="vgrid" id="vGrid"></div>
-  <button class="btn b-lg b-red b-off" id="vBtn" onclick="afterVote()">🔍 ادامه</button>
+  <button class="btn b-lg b-red b-off" id="vBtn" onclick="afterVote()" style="margin-top:12px">🔍 ادامه</button>
 </div>
 
 <!-- 6: Spy Guess -->
 <div class="scr" id="s6">
   <div class="guess-box">
-    <div class="guess-title">🕵️ جاسوس می‌خواد کلمه رو حدس بزنه!</div>
-    <div class="guess-sub" id="guessSub">جاسوس کلمه رو بلند بلند حدس بزنه</div>
-    <div class="action-row" style="max-width:400px">
-      <button class="btn b-lg b-red" onclick="spyGuessed(true)">✅ درست حدس زد</button>
-      <button class="btn b-lg b-green" onclick="spyGuessed(false)">❌ غلط حدس زد</button>
+    <div class="card3d" style="text-align:center">
+      <div class="guess-title">🕵️ جاسوس می‌خواد حدس بزنه!</div>
+      <div class="guess-sub" id="guessSub" style="margin-top:12px">جاسوس کلمه رو بلند بلند حدس بزنه</div>
     </div>
+    <div class="action-row" style="max-width:400px"><button class="btn b-lg b-red" onclick="spyGuessed(true)">✅ درست حدس زد</button><button class="btn b-lg b-green" onclick="spyGuessed(false)">❌ غلط حدس زد</button></div>
   </div>
 </div>
 
 <!-- 7: Result -->
 <div class="scr" id="s7">
   <div class="rbox" id="rBox"></div>
-  <div class="action-row" style="max-width:380px;margin-top:20px">
-    <button class="btn b-lg b-green" onclick="go(1)">🔄 دور بعد</button>
-    <button class="btn b-lg b-dark" onclick="go(8)">🏆 جدول امتیازات</button>
-  </div>
+  <div class="action-row" style="max-width:380px;margin-top:24px"><button class="btn b-lg b-green" onclick="go(1)">🔄 دور بعد</button><button class="btn b-lg b-dark" onclick="go(8)">🏆 جدول امتیازات</button></div>
 </div>
 
 <!-- 8: Scoreboard -->
 <div class="scr" id="s8">
-  <div class="card">
-    <div class="card-h" style="justify-content:center">🏆 جدول امتیازات</div>
-    <div class="score-grid" id="scoreGrid"></div>
-  </div>
-  <button class="btn b-lg b-green" onclick="go(1)" style="margin-top:16px">🎮 بازی جدید</button>
-  <button class="btn b-lg b-dark" onclick="resetAll()" style="margin-top:8px">🗑 صفر کردن امتیازات</button>
+  <div class="card3d"><div class="card-h" style="justify-content:center">🏆 جدول امتیازات</div><div class="score-grid" id="scoreGrid"></div></div>
+  <button class="btn b-lg b-green" onclick="go(1)" style="margin-top:18px">🎮 بازی جدید</button>
+  <button class="btn b-lg b-dark" onclick="resetAll()" style="margin-top:10px">🗑 صفر کردن امتیازات</button>
 </div>
 
 </div>
@@ -286,6 +300,9 @@ body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--txt)}
 <button class="challenge-btn" id="challengeBtn" onclick="startChallenge()">🕵️ چالش جاسوس!</button>
 
 <script>
+// ═══ PARTICLES ═══
+(function(){const c=document.getElementById('particles');for(let i=0;i<20;i++){const p=document.createElement('div');p.className='ptcl';p.style.left=Math.random()*100+'%';p.style.animationDuration=(8+Math.random()*12)+'s';p.style.animationDelay=Math.random()*10+'s';p.style.width=p.style.height=(2+Math.random()*3)+'px';c.appendChild(p)}})();
+
 const DATA={
 '🍎 میوه':['سیب','موز','پرتقال','انگور','هندوانه','طالبی','انار','گلابی','خیار','بادوم','گردو','فندق','کیوی','آلبالو','شلیل','خربزه','توت‌فرنگی','انبه','نارگیل','زیتون','لیمو','پسته','بادام','کشمش','توت','آلو','هلو','خرمالو','دستنبو','نخل','کام‌کوات','سالک','گواوا','پاپایا','ماگنولیا'],
 '🐱 حیوانات':['گربه','سگ','شیر','خرس','فیل','گوزن','خرگوش','روباه','مار','عقاب','ماهی','لاک‌پشت','قورباغه','پروانه','مورچه','زرافه','تمساح','شتر','بوف','جغد','سنجاب','گاو','اسب','گوسفند','خوک','خروس','بلبل','فاخته','طاووس','ببر','پلنگ','گرگ','گورخر','دلفین'],
@@ -296,18 +313,15 @@ const DATA={
 '🌍 شهرها':['تهران','اصفهان','شیراز','تبریز','مشهد','استانبول','دبی','لندن','پاریس','توکیو','رم','نیویورک','مسکو','سئول','بارسلون','برلین','آمستردام','ونیز','روما','آتن','قاهره','کپنهاگ','ورشو','بوداپست','پراگ','وین','زوریخ','موناکو','دوحه','ریاض'],
 '🎸 موسیقی':['گیتار','پیانو','درام','ویولن','بیس','ساکسیفون','ترومپت','فلوت','ارگ','سنتور','تار','سه‌تار','نی','دف','تمبک','نی‌انبان','قانون','قیچک','کمانچه','دودوک','باغلاما','بوزوکی','همنگ','کیبورد','هارمونیکا','کلارینت','ابوا','هورن','تیمپانی','زیلوفون'],
 '🎨 رنگها':['قرمز','آبی','سبز','زرد','نارنجی','بنفش','صورتی','قهوه‌ای','مشکی','سفید','طوسی','طلایی','نقره‌ای','فیروزه‌ای','یشمی','لاجوردی','زرشکی','یاسی','آبی آسمانی','سبز زمردی','نعنایی','ماه‌تابی','خردلی','زرین','مسی','برنزی','کرم','بژ','کاراملی','شکلاتی'],
-'🔧 ابزارآلات':['چکش','پیچ‌گوشتی','اره','مته','انبر','متر','تراز','گونیا','سنباده','کاردک','پتک','سیم‌چین','هویه','پمپ','کمپرسور','آچار','دیسک‌بر','فرز','سنگ‌ساب','دریل','پیچ‌بکس','نوار‌چسب','چسب‌حرارتی','کاتر','خط‌کش','تراش','سوزن','میخ','پیچ','مهره'],
-};
+'🔧 ابزارآلات':['چکش','پیچ‌گوشتی','اره','مته','انبر','متر','تراز','گونیا','سنباده','کاردک','پتک','سیم‌چین','هویه','پمپ','کمپرسور','آچار','دیسک‌بر','فرز','سنگ‌ساب','دریل','پیچ‌بکس','نوار‌چسب','چسب‌حرارتی','کاتر','خط‌کش','تراش','سوزن','میخ','پیچ','مهره']};
 
 const PRESETS=['بازیکن ۱','بازیکن ۲','بازیکن ۳','بازیکن ۴','بازیکن ۵','بازیکن ۶','بازیکن ۷','بازیکن ۸','بازیکن ۹','بازیکن ۱۰','بازیکن ۱۱','بازیکن ۱۲'];
 
 let players=[],spyIndices=[],secretWord='',currentCat='',round=1,turnIdx=0;
 let roles={},voteMap={},scores={};
 let usedWords=new Set(),ri=0;
-let doubleSpy=false;
-let voteTimerInterval=null,voteTimeLeft=60;
-let gameActive=false;
-let totalVotesAllowed=0;
+let doubleSpy=false,voteTimerInterval=null,voteTimeLeft=60;
+let gameActive=false,totalVotesAllowed=0;
 
 function go(n){
   document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
@@ -329,25 +343,14 @@ function renderCats(){
 }
 function pickCat(k){currentCat=k;go(2)}
 
-// ═══ PRESETS ═══
 function renderPresets(){
   document.getElementById('presetWrap').innerHTML=PRESETS.map(name=>{
-    const added=players.includes(name);
-    return`<div class="preset-btn ${added?'added':''}" onclick="addPreset('${name}')">${name}</div>`;
+    return`<div class="preset-btn ${players.includes(name)?'added':''}" onclick="addPreset('${name}')">${name}</div>`;
   }).join('');
 }
-function addPreset(name){
-  if(players.includes(name))return;
-  players.push(name);scores[name]=scores[name]||0;
-  renderP();renderPresets();
-}
+function addPreset(name){if(players.includes(name))return;players.push(name);scores[name]=scores[name]||0;renderP();renderPresets()}
 
-// ═══ PLAYERS ═══
-function addP(){
-  const inp=document.getElementById('pInp'),n=inp.value.trim();
-  if(!n||players.includes(n))return;
-  players.push(n);scores[n]=scores[n]||0;inp.value='';renderP();renderPresets();
-}
+function addP(){const inp=document.getElementById('pInp'),n=inp.value.trim();if(!n||players.includes(n))return;players.push(n);scores[n]=scores[n]||0;inp.value='';renderP();renderPresets()}
 function rmP(n){players=players.filter(p=>p!==n);renderP();renderPresets()}
 function renderP(){
   document.getElementById('pList').innerHTML=players.map((p,i)=>`<div class="pitm"><div class="pitm-l"><div class="pitm-n">${i+1}</div><div class="pitm-name">${p}</div></div><button class="pitm-x" onclick="rmP('${p}')">✕</button></div>`).join('');
@@ -356,7 +359,6 @@ function renderP(){
   document.getElementById('doubleSpyHint').style.display=players.length>=6?'block':'none';
 }
 
-// ═══ BEGIN ═══
 function beginGame(){
   if(players.length<3||!currentCat)return;
   const avail=DATA[currentCat].filter(w=>!usedWords.has(w));
@@ -365,26 +367,19 @@ function beginGame(){
   usedWords.add(secretWord);
   doubleSpy=players.length>=6;
   spyIndices=[];
-  if(doubleSpy){
-    let pool=players.map((_,i)=>i).filter(i=>i!==0);
-    shuffle(pool);spyIndices=[pool[0],pool[1]];
-  } else {
-    let pool=players.map((_,i)=>i).filter(i=>i!==0);
-    spyIndices=[pool[Math.floor(Math.random()*pool.length)]];
-  }
+  if(doubleSpy){let pool=players.map((_,i)=>i).filter(i=>i!==0);shuffle(pool);spyIndices=[pool[0],pool[1]]}
+  else{let pool=players.map((_,i)=>i).filter(i=>i!==0);spyIndices=[pool[Math.floor(Math.random()*pool.length)]]}
   roles={};players.forEach((p,i)=>roles[p]=spyIndices.includes(i)?'spy':'citizen');
   round=1;turnIdx=0;voteMap={};gameActive=true;
   go(3);showRole();
 }
 
-// ═══ ROLE ═══
 function showRole(){ri=0;showRoleAt(0)}
 function showRoleAt(i){
   ri=i;
   document.getElementById('rName').textContent=players[i];
   document.getElementById('rIdx').textContent=`(${i+1} / ${players.length})`;
-  const c=document.getElementById('rCard');
-  c.classList.remove('flipped');
+  document.getElementById('rCard').classList.remove('flipped');
   const btn=document.getElementById('rNext');
   if(i===players.length-1){btn.textContent='🎯 شروع بازی';btn.onclick=()=>{turnIdx=0;go(4);showTurn()}}
   else{btn.textContent='بعدی ▶';btn.onclick=nextR}
@@ -392,128 +387,72 @@ function showRoleAt(i){
 function flip(){
   const c=document.getElementById('rCard');
   if(c.classList.contains('flipped'))return;
-  const role=roles[players[ri]];
-  const back=document.getElementById('rBack');
+  const role=roles[players[ri]],back=document.getElementById('rBack');
   back.className=`big-card-back ${role==='spy'?'spy':'cit'}`;
   if(role==='spy'){
-    const catName=currentCat.replace(/^.\s*/,'');
-    back.innerHTML=`<div class="big-ico">🕵️</div><div class="big-title" style="color:var(--red)">تو جاسوسی!</div>
-      <div style="padding:10px 20px;background:rgba(255,23,68,.12);border-radius:12px;border:1px solid rgba(255,23,68,.2)">
-        <div style="font-size:12px;color:var(--mut)">دسته کلمات</div>
-        <div style="font-size:20px;font-weight:700;color:var(--red);margin-top:4px">${catName}</div>
-      </div>
-      <div class="big-sub">کلمه مخفی رو نمیدونی<br>فقط دسته رو میدونی — سعی کن تظاهر کنی!</div>`;
+    back.innerHTML=`<div class="big-ico">🕵️</div><div class="big-title" style="color:var(--red)">تو جاسوسی!</div><div style="padding:10px 20px;background:rgba(255,23,68,.1);border-radius:12px;border:1px solid rgba(255,23,68,.15)"><div style="font-size:12px;color:var(--mut)">دسته</div><div style="font-size:22px;font-weight:700;color:var(--red);margin-top:4px">${currentCat.replace(/^.\s*/,'')}</div></div><div class="big-sub">کلمه مخفی رو نمیدونی<br>فقط دسته رو میدونی!</div>`;
   } else {
-    back.innerHTML=`<div class="big-ico">👤</div><div class="big-title" style="color:var(--acc)">تو شهروندی</div><div class="big-word">${secretWord}</div><div class="big-sub">کلمه مخفی: <b style="color:var(--acc)">${secretWord}</b><br>یه کلمه مرتبط بگو!</div>`;
+    back.innerHTML=`<div class="big-ico">👤</div><div class="big-title" style="color:var(--acc)">تو شهروندی</div><div class="big-word">${secretWord}</div><div class="big-sub">یه کلمه مرتبط بگو!</div>`;
   }
   c.classList.add('flipped');
 }
 function nextR(){if(!document.getElementById('rCard').classList.contains('flipped')){flip();return}ri++;if(ri<players.length)showRoleAt(ri)}
 function prevR(){if(ri>0)showRoleAt(ri-1)}
 
-// ═══ GAME ═══
 function showTurn(){
   document.getElementById('roundBadge').textContent=`دور ${round}`;
   document.getElementById('wordText').textContent=secretWord;
   document.getElementById('turnName').textContent=players[turnIdx];
 }
-function nextTurn(){
-  turnIdx++;
-  if(turnIdx>=players.length){turnIdx=0;round++}
-  showTurn();
-}
+function nextTurn(){turnIdx++;if(turnIdx>=players.length){turnIdx=0;round++}showTurn()}
 
-// ═══ CHALLENGE ═══
-function startChallenge(){
-  gameActive=false;
-  document.getElementById('challengeBtn').style.display='none';
-  document.getElementById('guessSub').textContent='جاسوس می‌خواد وسط بازی کلمه رو حدس بزنه!';
-  document.getElementById('guessInp').value='';
-  go(6);
-}
+function startChallenge(){gameActive=false;document.getElementById('challengeBtn').style.display='none';go(6)}
 
-// ═══ VOTE ═══
 function renderVote(){
-  voteMap={};
-  totalVotesAllowed=players.length;
+  voteMap={};totalVotesAllowed=players.length;
   document.getElementById('votesLeft').textContent=totalVotesAllowed;
   document.getElementById('vGrid').innerHTML=players.map(p=>`<div class="vbtn" id="vb-${p}" onclick="vote('${p}',this)"><div class="vbtn-n">${p}</div><div class="vbtn-c" id="vc-${p}">0</div></div>`).join('');
   document.getElementById('vBtn').classList.add('b-off');
 }
 function vote(n,el){
   if(totalVotesAllowed<=0)return;
-  voteMap[n]=(voteMap[n]||0)+1;
-  totalVotesAllowed--;
+  voteMap[n]=(voteMap[n]||0)+1;totalVotesAllowed--;
   document.getElementById('vc-'+n).textContent=voteMap[n];
   document.getElementById('votesLeft').textContent=totalVotesAllowed;
   el.classList.add('on');setTimeout(()=>el.classList.remove('on'),200);
-  // disable all buttons when no votes left
-  if(totalVotesAllowed<=0){
-    document.querySelectorAll('.vbtn').forEach(b=>b.classList.add('disabled'));
-    document.getElementById('vBtn').classList.remove('b-off');
-  }
+  if(totalVotesAllowed<=0){document.querySelectorAll('.vbtn').forEach(b=>b.classList.add('disabled'));document.getElementById('vBtn').classList.remove('b-off')}
 }
 
-function startVoteTimer(){
-  stopVoteTimer();voteTimeLeft=60;updateVoteTimerDisplay();
-  voteTimerInterval=setInterval(()=>{voteTimeLeft--;updateVoteTimerDisplay();if(voteTimeLeft<=0){stopVoteTimer();afterVote()}},1000);
-}
+function startVoteTimer(){stopVoteTimer();voteTimeLeft=60;updateVoteTimerDisplay();voteTimerInterval=setInterval(()=>{voteTimeLeft--;updateVoteTimerDisplay();if(voteTimeLeft<=0){stopVoteTimer();afterVote()}},1000)}
 function stopVoteTimer(){if(voteTimerInterval){clearInterval(voteTimerInterval);voteTimerInterval=null}}
-function updateVoteTimerDisplay(){
-  const el=document.getElementById('voteTimer');el.textContent=voteTimeLeft;el.classList.toggle('warn',voteTimeLeft<=15);
-}
+function updateVoteTimerDisplay(){const el=document.getElementById('voteTimer');el.textContent=voteTimeLeft;el.classList.toggle('warn',voteTimeLeft<=15)}
 
-// ═══ AFTER VOTE ═══
 let spyCaught=false;
 function afterVote(){
   stopVoteTimer();
-  let mx=0,sus='';
-  for(const[n,c]of Object.entries(voteMap)){if(c>mx){mx=c;sus=n}}
-  spyCaught=false;
-  spyIndices.forEach(si=>{if(players[si]===sus)spyCaught=true});
-  document.getElementById('guessInp').value='';
-  document.getElementById('guessSub').textContent='جاسوس کلمه‌ای که فکر می‌کنه مخفیه رو تایپ کنه';
+  let mx=0,sus='';for(const[n,c]of Object.entries(voteMap)){if(c>mx){mx=c;sus=n}}
+  spyCaught=false;spyIndices.forEach(si=>{if(players[si]===sus)spyCaught=true});
   go(6);
 }
 
-// ═══ SPY GUESS ═══
 function spyGuessed(correct){
   gameActive=false;document.getElementById('challengeBtn').style.display='none';
   const spyNames=spyIndices.map(i=>players[i]).join(' و ');
-  let spyWins=correct;
-  let citizensWin=spyCaught&&!correct;
-  if(spyWins){spyIndices.forEach(si=>{scores[players[si]]=(scores[players[si]]||0)+1})}
-  else if(citizensWin){players.forEach((p,i)=>{if(!spyIndices.includes(i))scores[p]=(scores[p]||0)+1})}
+  if(correct){spyIndices.forEach(si=>{scores[players[si]]=(scores[players[si]]||0)+1})}
+  else if(spyCaught){players.forEach((p,i)=>{if(!spyIndices.includes(i))scores[p]=(scores[p]||0)+1})}
   const box=document.getElementById('rBox');
-  if(spyWins){
-    box.className='rbox lose';
-    box.innerHTML=`<div class="r-ico">🕵️</div><div class="r-title" style="color:var(--red)">جاسوس برنده شد!</div>
-      <div class="r-sub">${spyNames} تونستن کلمه رو حدس بزنه — +۱ امتیاز</div>
-      <div class="r-row"><div class="lbl">🕵️ جاسوس${doubleSpy?'(ها)':''}</div><div class="val" style="color:var(--red)">${spyNames}</div></div>
-      <div class="r-row"><div class="lbl">🎯 کلمه مخفی</div><div class="val" style="color:var(--acc)">${secretWord}</div></div>
-      <div class="r-row"><div class="lbl">📅 دور</div><div class="val" style="color:var(--cyn)">${round}</div></div>`;
-  } else if(citizensWin){
-    box.className='rbox win';
-    box.innerHTML=`<div class="r-ico">🎉</div><div class="r-title" style="color:var(--acc)">شهروندان برنده شدند!</div>
-      <div class="r-sub">${spyNames} جاسوس${doubleSpy?'(ها)':''} بود و نتونست حدس بزنه — +۱ امتیاز به هر شهروند</div>
-      <div class="r-row"><div class="lbl">🕵️ جاسوس${doubleSpy?'(ها)':''}</div><div class="val" style="color:var(--red)">${spyNames}</div></div>
-      <div class="r-row"><div class="lbl">🎯 کلمه مخفی</div><div class="val" style="color:var(--acc)">${secretWord}</div></div>
-      <div class="r-row"><div class="lbl">📅 دور</div><div class="val" style="color:var(--cyn)">${round}</div></div>`;
-    confetti();
+  if(correct){
+    box.className='rbox lose';box.innerHTML=`<div class="r-ico">🕵️</div><div class="r-title" style="color:var(--red)">جاسوس برنده شد!</div><div class="r-sub">${spyNames} تونستن کلمه رو حدس بزنه — +۱ امتیاز</div><div class="r-row"><div class="lbl">🕵️ جاسوس${doubleSpy?'(ها)':''}</div><div class="val" style="color:var(--red)">${spyNames}</div></div><div class="r-row"><div class="lbl">🎯 کلمه مخفی</div><div class="val" style="color:var(--acc)">${secretWord}</div></div><div class="r-row"><div class="lbl">📅 دور</div><div class="val" style="color:var(--cyn)">${round}</div></div>`;
+  } else if(spyCaught){
+    box.className='rbox win';box.innerHTML=`<div class="r-ico">🎉</div><div class="r-title" style="color:var(--acc)">شهروندان برنده شدند!</div><div class="r-sub">${spyNames} جاسوس${doubleSpy?'(ها)':''} بود و نتونست حدس بزنه — +۱ امتیاز</div><div class="r-row"><div class="lbl">🕵️ جاسوس${doubleSpy?'(ها)':''}</div><div class="val" style="color:var(--red)">${spyNames}</div></div><div class="r-row"><div class="lbl">🎯 کلمه مخفی</div><div class="val" style="color:var(--acc)">${secretWord}</div></div><div class="r-row"><div class="lbl">📅 دور</div><div class="val" style="color:var(--cyn)">${round}</div></div>`;confetti();
   } else {
-    box.className='rbox lose';
-    const sus=getTopVote();
-    box.innerHTML=`<div class="r-ico">🤝</div><div class="r-title" style="color:var(--gld)">مساوی شد!</div>
-      <div class="r-sub">${sus?`${sus} متهم شد ولی جاسوس نبود`:'کسی رأی نگرفت'} و جاسوس نتونست حدس بزنه</div>
-      <div class="r-row"><div class="lbl">🕵️ جاسوس${doubleSpy?'(ها)':''}</div><div class="val" style="color:var(--red)">${spyNames}</div></div>
-      <div class="r-row"><div class="lbl">🎯 کلمه مخفی</div><div class="val" style="color:var(--acc)">${secretWord}</div></div>
-      <div class="r-row"><div class="lbl">📅 دور</div><div class="val" style="color:var(--cyn)">${round}</div></div>`;
+    box.className='rbox lose';const sus=getTopVote();
+    box.innerHTML=`<div class="r-ico">🤝</div><div class="r-title" style="color:var(--gld)">مساوی شد!</div><div class="r-sub">${sus?`${sus} متهم شد ولی جاسوس نبود`:'کسی رأی نگرفت'} و جاسوس نتونست حدس بزنه</div><div class="r-row"><div class="lbl">🕵️ جاسوس${doubleSpy?'(ها)':''}</div><div class="val" style="color:var(--red)">${spyNames}</div></div><div class="r-row"><div class="lbl">🎯 کلمه مخفی</div><div class="val" style="color:var(--acc)">${secretWord}</div></div><div class="r-row"><div class="lbl">📅 دور</div><div class="val" style="color:var(--cyn)">${round}</div></div>`;
   }
   go(7);
 }
 function getTopVote(){let mx=0,s='';for(const[n,c]of Object.entries(voteMap)){if(c>mx){mx=c;s=n}}return s}
 
-// ═══ SCORES ═══
 function renderScores(){
   const sorted=Object.entries(scores).sort((a,b)=>b[1]-a[1]);
   document.getElementById('scoreGrid').innerHTML=sorted.map(([name,pts],i)=>{
@@ -525,15 +464,15 @@ function renderHomeScores(){
   const sorted=Object.entries(scores).sort((a,b)=>b[1]-a[1]);
   if(sorted.length===0||sorted.every(([,p])=>p===0)){document.getElementById('homeScores').style.display='none';return}
   document.getElementById('homeScores').style.display='block';
-  document.getElementById('homeScoreList').innerHTML=sorted.slice(0,5).map(([n,p],i)=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bdr)"><span style="font-size:13px">${i+1}. ${n}</span><span style="font-size:13px;font-weight:700;color:var(--gld)">${p}</span></div>`).join('');
+  document.getElementById('homeScoreList').innerHTML=sorted.slice(0,5).map(([n,p],i)=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(30,30,68,.5)"><span style="font-size:14px">${i+1}. ${n}</span><span style="font-size:14px;font-weight:700;color:var(--gld)">${p}</span></div>`).join('');
 }
 function resetAll(){scores={};players.forEach(p=>scores[p]=0);go(0)}
 
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function confetti(){
   const c=document.getElementById('confetti');c.innerHTML='';
-  const cols=['#00e87b','#ff1744','#a855f7','#f59e0b','#06b6d4','#fff'];
-  for(let i=0;i<70;i++){const el=document.createElement('div');el.className='conf';el.style.left=Math.random()*100+'%';el.style.top='-10px';el.style.backgroundColor=cols[Math.floor(Math.random()*cols.length)];el.style.animationDelay=Math.random()*2+'s';el.style.animationDuration=(2+Math.random()*2)+'s';c.appendChild(el);setTimeout(()=>el.remove(),5000)}
+  const cols=['#00e87b','#ff1744','#a855f7','#f59e0b','#06b6d4','#fff','#ff6b9d'];
+  for(let i=0;i<80;i++){const el=document.createElement('div');el.className='conf';el.style.left=Math.random()*100+'%';el.style.top='-10px';el.style.width=(4+Math.random()*8)+'px';el.style.height=(4+Math.random()*8)+'px';el.style.backgroundColor=cols[Math.floor(Math.random()*cols.length)];el.style.animationDelay=Math.random()*2+'s';el.style.animationDuration=(2.5+Math.random()*2)+'s';el.style.borderRadius=Math.random()>.5?'50%':'2px';c.appendChild(el);setTimeout(()=>el.remove(),5500)}
 }
 </script>
 </body>
