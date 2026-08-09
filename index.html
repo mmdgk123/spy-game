@@ -247,8 +247,7 @@ body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--txt)}
 <div class="scr" id="s6">
   <div class="guess-box">
     <div class="guess-title">🕵️ جاسوس می‌خواد کلمه رو حدس بزنه!</div>
-    <div class="guess-sub" id="guessSub">جاسوس کلمه‌ای که فکر می‌کنه مخفیه رو تایپ کنه</div>
-    <input class="guess-input" id="guessInp" placeholder="کلمه مخفی رو بنویس...">
+    <div class="guess-sub" id="guessSub">جاسوس کلمه رو بلند بلند حدس بزنه</div>
     <div class="action-row" style="max-width:400px">
       <button class="btn b-lg b-red" onclick="spyGuessed(true)">✅ درست حدس زد</button>
       <button class="btn b-lg b-green" onclick="spyGuessed(false)">❌ غلط حدس زد</button>
@@ -293,7 +292,7 @@ const DATA={
 '🔧 ابزارآلات':['چکش','پیچ‌گوشتی','اره','مته','انبر','متر','تراز','گونیا','سنباده','کاردک','پتک','سیم‌چین','هویه','پمپ','کمپرسور','آچار','دیسک‌بر','فرز','سنگ‌ساب','دریل','پیچ‌بکس','نوار‌چسب','چسب‌حرارتی','کاتر','خط‌کش','تراش','سوزن','میخ','پیچ','مهره'],
 };
 
-const PRESETS=['محمد','علی','رضا','امیر','حسین','حسن','سعید','مهدی','علیرضا','امیرحسین','یوسف','دارا','پارسا','آراد','آرش','بهنام','بهرام','پیمان','توما','جواد','حسام','خیلی','سینا','شهاب','صابر','فرهاد','کاوه','کیان','مرتضی','میلاد','نیما','هادی','یاشار','یونس','امیرعلی','پوریا'];
+const PRESETS=['بازیکن ۱','بازیکن ۲','بازیکن ۳','بازیکن ۴','بازیکن ۵','بازیکن ۶','بازیکن ۷','بازیکن ۸','بازیکن ۹','بازیکن ۱۰','بازیکن ۱۱','بازیکن ۱۲'];
 
 let players=[],spyIndices=[],secretWord='',currentCat='',round=1,turnIdx=0;
 let roles={},voteMap={},scores={};
