@@ -346,7 +346,7 @@ function flip(){const c=document.getElementById('rCard');if(c.classList.contains
 function nextR(){if(!document.getElementById('rCard').classList.contains('flipped')){flip();return}ri++;if(ri<players.length)showRoleAt(ri)}
 function prevR(){if(ri>0)showRoleAt(ri-1)}
 
-function shuffleTurnOrder(){let nonSpy=players.map((p,i)=>({p,i})).filter(x=>!spyIndices.includes(x.i));shuffle(nonSpy);turnOrder=nonSpy.map(x=>x.i)}
+function shuffleTurnOrder(){let order=players.map((_,i)=>i);shuffle(order);let firstSpy=order.findIndex(i=>spyIndices.includes(i));if(firstSpy!==-1&&firstSpy>0){[order[0],order[firstSpy]]=[order[firstSpy],order[0]]}turnOrder=order}
 function showTurn(){document.getElementById('roundBadge').textContent=`دور ${round}`;document.getElementById('turnName').textContent=players[turnOrder[turnIdx]]}
 function nextTurn(){turnIdx++;if(turnIdx>=turnOrder.length){turnIdx=0;round++;shuffleTurnOrder()}showTurn()}
 
