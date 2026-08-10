@@ -338,7 +338,7 @@ function addP(){const inp=document.getElementById('pInp'),n=inp.value.trim();if(
 function rmP(n){players=players.filter(p=>p!==n);renderP();renderPresets()}
 function renderP(){document.getElementById('pList').innerHTML=players.map((p,i)=>`<div class="pitm"><div class="pitm-l"><div class="pitm-n">${i+1}</div><div class="pitm-name">${p}</div></div><button class="pitm-x" onclick="rmP('${p}')">✕</button></div>`).join('');document.getElementById('pCnt').textContent=players.length;document.getElementById('goBtn').classList.toggle('b-off',players.length<3);document.getElementById('doubleSpyHint').style.display=players.length>=6?'block':'none'}
 
-function beginGame(){if(players.length<3||!currentCat)return;const avail=DATA[currentCat].filter(w=>!usedWords.has(w));if(avail.length===0){usedWords.clear();return beginGame()}secretWord=avail[Math.floor(Math.random()*avail.length)];usedWords.add(secretWord);doubleSpy=players.length>=6;players=shuffle([...players]);spyIndices=[];if(doubleSpy){let pool=players.map((_,i)=>i).filter(i=>i!==0);shuffle(pool);spyIndices=[pool[0],pool[1]]}else{let pool=players.map((_,i)=>i).filter(i=>i!==0);shuffle(pool);spyIndices=[pool[0]]}roles={};players.forEach((p,i)=>roles[p]=spyIndices.includes(i)?'spy':'citizen');round=1;turnIdx=0;voteMap={};gameActive=true;go(3);showRole()}
+function beginGame(){if(players.length<3||!currentCat)return;const avail=DATA[currentCat].filter(w=>!usedWords.has(w));if(avail.length===0){usedWords.clear();return beginGame()}secretWord=avail[Math.floor(Math.random()*avail.length)];usedWords.add(secretWord);doubleSpy=players.length>=6;players=shuffle([...players]);spyIndices=[];if(doubleSpy){let pool=players.map((_,i)=>i).filter(i=>i!==0);shuffle(pool);spyIndices=[pool[0],pool[1]]}else{let pool=players.map((_,i)=>i).filter(i=>i!==0);shuffle(pool);spyIndices=[pool[0]]}roles={};players.forEach((p,i)=>roles[p]=spyIndices.includes(i)?'spy':'citizen');round=1;turnIdx=0;voteMap={};gameActive=true;shuffleTurnOrder();go(3);showRole()}
 
 function showRole(){ri=0;showRoleAt(0)}
 function showRoleAt(i){ri=i;document.getElementById('rName').textContent=players[i];document.getElementById('rIdx').textContent=`(${i+1} / ${players.length})`;document.getElementById('rCard').classList.remove('flipped');const btn=document.getElementById('rNext');if(i===players.length-1){btn.textContent='🎯 شروع بازی';btn.onclick=()=>{turnIdx=0;go(4);showTurn()}}else{btn.textContent='بعدی ▶';btn.onclick=nextR}}
@@ -346,8 +346,9 @@ function flip(){const c=document.getElementById('rCard');if(c.classList.contains
 function nextR(){if(!document.getElementById('rCard').classList.contains('flipped')){flip();return}ri++;if(ri<players.length)showRoleAt(ri)}
 function prevR(){if(ri>0)showRoleAt(ri-1)}
 
-function showTurn(){document.getElementById('roundBadge').textContent=`دور ${round}`;document.getElementById('wordText').textContent=secretWord;document.getElementById('turnName').textContent=players[turnIdx]}
-function nextTurn(){turnIdx++;if(turnIdx>=players.length){turnIdx=0;round++}showTurn()}
+function shuffleTurnOrder(){let nonSpy=players.map((p,i)=>({p,i})).filter(x=>!spyIndices.includes(x.i));shuffle(nonSpy);turnOrder=nonSpy.map(x=>x.i)}
+function showTurn(){document.getElementById('roundBadge').textContent=`دور ${round}`;document.getElementById('turnName').textContent=players[turnOrder[turnIdx]]}
+function nextTurn(){turnIdx++;if(turnIdx>=turnOrder.length){turnIdx=0;round++;shuffleTurnOrder()}showTurn()}
 
 function startChallenge(){gameActive=false;document.getElementById('challengeBtn').style.display='none';go(6)}
 
